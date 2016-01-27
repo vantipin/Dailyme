@@ -1,1 +1,61 @@
+# Mac OS X Finder and whatnot
+.DS_Store
+
+#appcode jetbrains ide's 
 .idea
+.gradle
+
+# Sparkle distribution Private Key (Don't check me in!)
+dsa_priv.pem
+
+# XCode (and ancestors) per-user config (very noisy, and not relevant)
+*.mode1
+*.mode1v3
+*.mode2v3
+*.perspective
+*.perspectivev3
+*.pbxuser
+*xcuserdata/
+**/*.xccheckout
+#project.xcworkspace
+
+# Generated files
+VersionX-revision.h
+
+#emacs backups
+#other backups
+\#*
+*~
+.\#*
+
+# build products
+build/
+DerivedData/
+*.[o]
+
+# Other source repository archive directories (protects when importing)
+.hg
+.svn
+CVS
+
+#features code for calabash and ruby
+.irb-history
+/features/\#*
+screenshot_*
+
+# automatic backup files
+*~.nib
+*.swp
+*~
+*(Autosaved).rtfd/
+Backup[ ]of[ ]*.pages/
+Backup[ ]of[ ]*.key/
+Backup[ ]of[ ]*.numbers/
+
+# Merge artefacts
+*.orig
+
+# File used to embed the current git commit into the about box
+GitVersion.h
+
+#build.sh
