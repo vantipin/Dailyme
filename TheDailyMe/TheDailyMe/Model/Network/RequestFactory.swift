@@ -10,7 +10,7 @@ import Foundation
 
 class RequestFactory
 {
-    private static let baseUrl = "https://us-cloud-api-qa.picsolve.net/"
+    private static let baseUrl = "http://0.0.0.0/huge/"
 //    private static let baseUrl = "https://us-cloud-api-ci.picsolve.net/"
     
     // Getting the API end point in debug mode
@@ -32,9 +32,10 @@ class RequestFactory
     static func createBaseRequest(endpoint: String, method: String, eTag: String?) -> NSMutableURLRequest?
     {
         let urlString = "\(baseUrl)\(endpoint)"
-        if let escapedString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding),
+        if let escapedString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()),
             url = NSURL(string: escapedString)
         {
+            
             let baseRequest = NSMutableURLRequest(URL: url, cachePolicy: .ReloadIgnoringLocalCacheData , timeoutInterval: 60.0)
             
             baseRequest.HTTPMethod = method

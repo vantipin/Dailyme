@@ -24,13 +24,13 @@ public class DataManager: NSObject {
     */
     override init() {
         
-        let dataURL: NSURL = DataManager.fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent("PicPlay.sqlite")
+        let dataURL: NSURL = DataManager.fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent("TheDailyMe.sqlite")
         
         let options: [NSObject: AnyObject] = [NSMigratePersistentStoresAutomaticallyOption : true,
             NSInferMappingModelAutomaticallyOption : true,
             NSSQLitePragmasOption : ["journal_mode" : "DELETE"]]
 
-        let url: NSURL = NSBundle.mainBundle().URLForResource("PicPlay", withExtension: "momd")!
+        let url: NSURL = NSBundle.mainBundle().URLForResource("TheDailyMe", withExtension: "momd")!
 
         self.model = NSManagedObjectModel(contentsOfURL: url)!
         self.coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.model)
@@ -211,25 +211,6 @@ public class DataManager: NSObject {
         return true
     }
     
-    /**
-    Delete user-specific data from database.
-    
-    - parameter userId: User identifier.
-    */
-    public func deleteUserData(userId: String) {
-        self.deleteEntities("RidePicture", relativeEntityName: nil, relativeID: nil, sortDescriptor: nil)
-        self.deleteEntities("UserPicture", relativeEntityName: nil, relativeID: nil, sortDescriptor: nil)
-        self.deleteEntities("Achievement", relativeEntityName: "user.identifier", relativeID: userId, sortDescriptor: nil)
-        
-        self.deleteEntities("Album", relativeEntityName: nil, relativeID: nil, sortDescriptor: nil)
-        self.deleteEntities("ParkmediaThumbnail", relativeEntityName: nil, relativeID: nil, sortDescriptor: nil)
-        self.deleteEntities("Redemption", relativeEntityName: nil, relativeID: nil, sortDescriptor: nil)
-     
-        self.deleteEntities("EndpointMetadata", relativeEntityName: nil, relativeID: nil, sortDescriptor: nil)
-        
-        self.deleteEntity("User", withID: userId)
-    }
-
     // MARK: - Save Methods
     /**
     Save changed in object content into persistent storage.

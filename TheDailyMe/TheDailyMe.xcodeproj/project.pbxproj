@@ -18,7 +18,6 @@
 		5C8CC8E91C5944F300CE3504 /* CoreNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8E21C5944F300CE3504 /* CoreNetworkManager.swift */; };
 		5C8CC8EB1C5944F300CE3504 /* NetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8E51C5944F300CE3504 /* NetworkHelper.swift */; };
 		5C8CC8EC1C5944F300CE3504 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8E61C5944F300CE3504 /* NetworkManager.swift */; };
-		5C8CC8ED1C5944F300CE3504 /* NetworkResponseProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8E71C5944F300CE3504 /* NetworkResponseProcessor.swift */; };
 		5C8CC8EE1C5944F300CE3504 /* RequestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8E81C5944F300CE3504 /* RequestFactory.swift */; };
 		5C8CC8F31C59459D00CE3504 /* NSManagedObject+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8F01C59459D00CE3504 /* NSManagedObject+JSON.swift */; };
 		5C8CC8F41C59459D00CE3504 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8F11C59459D00CE3504 /* DataManager.swift */; };
@@ -67,7 +66,6 @@
 		5C8CC8E21C5944F300CE3504 /* CoreNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreNetworkManager.swift; sourceTree = "<group>"; };
 		5C8CC8E51C5944F300CE3504 /* NetworkHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkHelper.swift; sourceTree = "<group>"; };
 		5C8CC8E61C5944F300CE3504 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		5C8CC8E71C5944F300CE3504 /* NetworkResponseProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkResponseProcessor.swift; sourceTree = "<group>"; };
 		5C8CC8E81C5944F300CE3504 /* RequestFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestFactory.swift; sourceTree = "<group>"; };
 		5C8CC8F01C59459D00CE3504 /* NSManagedObject+JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+JSON.swift"; sourceTree = "<group>"; };
 		5C8CC8F11C59459D00CE3504 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
@@ -186,7 +184,6 @@
 				5C8CC8E21C5944F300CE3504 /* CoreNetworkManager.swift */,
 				5C8CC8E51C5944F300CE3504 /* NetworkHelper.swift */,
 				5C8CC8E61C5944F300CE3504 /* NetworkManager.swift */,
-				5C8CC8E71C5944F300CE3504 /* NetworkResponseProcessor.swift */,
 				5C8CC8E81C5944F300CE3504 /* RequestFactory.swift */,
 			);
 			path = Network;
@@ -346,7 +343,6 @@
 			files = (
 				5C8CC8F81C59461100CE3504 /* Logging.swift in Sources */,
 				5C8CC90B1C594FF100CE3504 /* EndpointMetadata.swift in Sources */,
-				5C8CC8ED1C5944F300CE3504 /* NetworkResponseProcessor.swift in Sources */,
 				5C8CC8E01C59447400CE3504 /* ViewController.swift in Sources */,
 				5C8CC9001C59473500CE3504 /* Utility.swift in Sources */,
 				5C8CC8B51C5943EE00CE3504 /* TheDailyMe.xcdatamodeld in Sources */,
@@ -595,6 +591,7 @@
 				5C8CC8D61C5943EE00CE3504 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C8CC8D71C5943EE00CE3504 /* Build configuration list for PBXNativeTarget "TheDailyMeTests" */ = {
 			isa = XCConfigurationList;
@@ -603,6 +600,7 @@
 				5C8CC8D91C5943EE00CE3504 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5C8CC8DA1C5943EE00CE3504 /* Build configuration list for PBXNativeTarget "TheDailyMeUITests" */ = {
 			isa = XCConfigurationList;
@@ -611,6 +609,7 @@
 				5C8CC8DC1C5943EE00CE3504 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
