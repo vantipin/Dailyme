@@ -14,6 +14,7 @@ public class NetworkManager:CoreNetworkManager
     public static let sharedInstance = NetworkManager()
     
     
+    //test
     public func getSomeData() -> String {
         let identifer = "TestEndPoint"
         self.sendDataRequest("GET", endpoint: Constant.String.Endpoint.testEndpoint, type: RequestType.TestEndpoint, identifier: identifer)
@@ -25,6 +26,132 @@ public class NetworkManager:CoreNetworkManager
         let identifer = "TestEndPoint"
         let params = ["userEMail": "pinkypinkyhorror@gmail.com"]
         self.sendDataRequest("POST", endpoint: Constant.String.Endpoint.testEndpointPost, type: RequestType.TestEndpoint, identifier: identifer, params: params)
+        return identifer
+    }
+    
+    //User API
+    public func userCreate(user: User) -> String {
+        if let id = user.id,
+            email = user.email,
+            firstName = user.firstName,
+            lastName = user.lastName,
+            password = user.password,
+            avatarImage = user.avatarImage {
+                
+                let identifer = "createUser\(id.integerValue)"
+                let params : [String : AnyObject] = ["id": id,
+                    "email": email,
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "password": password,
+                    "avatarImage": avatarImage]
+                self.sendDataRequest("POST", endpoint: Constant.String.Endpoint.userCreate, type: RequestType.UserCreate, identifier: identifer, params: params)
+                
+                return identifer
+                
+        }
+        return ""
+    }
+    
+    public func userGet(userId: NSNumber) -> String {
+        let identifer = "getUser\(userId)"
+        self.sendDataRequest("GET", endpoint: "\(Constant.String.Endpoint.user)\(userId)", type: RequestType.UserGet, identifier: identifer)
+        return identifer
+    }
+    
+    public func userDelete(userId: NSNumber) -> String {
+        let identifer = "deleteUser\(userId)"
+        self.sendDataRequest("Delete", endpoint: "\(Constant.String.Endpoint.user)\(userId)", type: RequestType.UserDelete, identifier: identifer)
+        return identifer
+    }
+    
+    public func userUpdate(user: User) -> String {
+        if let id = user.id,
+            email = user.email,
+            firstName = user.firstName,
+            lastName = user.lastName,
+            password = user.password,
+            avatarImage = user.avatarImage {
+                
+                let identifer = "updateUser\(id.integerValue)"
+                let params : [String : AnyObject] = ["id": id,
+                    "email": email,
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "password": password,
+                    "avatarImage": avatarImage]
+                self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.user)\(user.id)", type: RequestType.UserUpdate, identifier: identifer, params: params)
+                
+                return identifer
+        }
+        return ""
+    }
+    
+    public func userLogin(email : String, password : String) -> String {
+        let identifer = "loginUser\(email)"
+        let params : [String : AnyObject] = ["email": email,"password": password]
+        self.sendDataRequest("POST", endpoint: Constant.String.Endpoint.userLogin, type: RequestType.UserLogin, identifier: identifer, params: params)
+        
+        return identifer
+    }
+    
+    //Records API
+    public func recordCreate(userId: NSNumber, record: Record, question: Question) -> String {
+        
+        if let id = record.id,
+            answer = record.answer,
+            note = record.note,
+            date = record.date,
+            stringDate = dateToString(date),
+            questionId = question.id,
+            questionText = question.text {
+                
+                let identifer = "createRecord\(record.id?.integerValue)"
+                let questionParams = ["id" : questionId, "text" : questionText];
+                let params : [String : AnyObject] = ["id": id,
+                    "answer": answer,
+                    "note": note,
+                    "date": stringDate,
+                    "question": questionParams]
+                self.sendDataRequest("POST", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.records)", type: RequestType.RecordCreate, identifier: identifer, params: params)
+                return identifer
+        }
+        return ""
+    }
+    
+    //TODO: schema startDate endDate
+    public func recordsGet(userId: NSNumber) -> String {
+        let identifer = "getRecord\(userId)"
+        self.sendDataRequest("GET", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.records)", type: RequestType.RecordGet, identifier: identifer)
+        return identifer
+    }
+    
+    public func recordsUpdate(userId: NSNumber, record: Record, question: Question) -> String {
+        
+        if let id = record.id,
+            answer = record.answer,
+            note = record.note,
+            date = record.date,
+            stringDate = dateToString(date),
+            questionId = question.id,
+            questionText = question.text {
+                
+                let identifer = "updateRecord\(record.id?.integerValue)"
+                let questionParams = ["id" : questionId, "text" : questionText];
+                let params : [String : AnyObject] = ["id": id,
+                    "answer": answer,
+                    "note": note,
+                    "date": stringDate,
+                    "question": questionParams]
+                self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.recordsUpdate)\(id)", type: RequestType.RecordUpdate, identifier: identifer, params: params)
+                return identifer
+        }
+        return ""
+    }
+    
+    public func recordDelete(userId: NSNumber, recordId: NSNumber) -> String {
+        let identifer = "deleteRecord\(recordId)"
+        self.sendDataRequest("DELETE", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.recordsUpdate)\(recordId)", type: RequestType.RecordDelete, identifier: identifer)
         return identifer
     }
     
@@ -112,9 +239,47 @@ public class NetworkManager:CoreNetworkManager
         case RequestType.TestEndpoint:
             logDebug("\(data)")
             return true
+        case RequestType.UserCreate:
+            return self.processUserCreate(requestIdentifier, data: data)
         default:
             logDebug("\(data)");
             return true
         }
+    }
+    
+    func processUserCreate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processUserGet(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processUserDelete(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processUserUpdate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processUserLogin(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processRecordCreate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processRecordGet(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processRecordUpdate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processRecordDelete(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
     }
 }

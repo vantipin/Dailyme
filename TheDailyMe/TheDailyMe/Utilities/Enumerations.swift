@@ -22,7 +22,22 @@ public enum ErrorCode: String
 public enum RequestType: Int
 {
     case DownloadFile
+    
+    //test
     case TestEndpoint
+    
+    //User
+    case UserCreate
+    case UserGet
+    case UserDelete
+    case UserUpdate
+    case UserLogin
+    
+    //Records
+    case RecordCreate
+    case RecordGet
+    case RecordUpdate
+    case RecordDelete
 }
 
 enum AuthorizationType: Int

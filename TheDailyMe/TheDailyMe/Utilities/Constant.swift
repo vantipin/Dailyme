@@ -42,8 +42,18 @@ struct Constant {
         
         struct Endpoint {
             
+            //test
             static let testEndpoint = "api/doctorInfo"
             static let testEndpointPost = "api/getRecipesForUserNameAction"
+            
+            //User
+            static let userCreate = "/user"//POST
+            static let user = "/user/"//PUT/GET/DELETE
+            static let userLogin = "/user/login" //POST
+            
+            //Records
+            static let records = "/records"///user/{userId}/records //POST/GET
+            static let recordsUpdate = "/records/"///user/{id}/records/{recordId} //PUT/GET/DELETE
         }
         
         struct Notification {
