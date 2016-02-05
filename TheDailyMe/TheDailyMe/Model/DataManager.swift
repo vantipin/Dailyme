@@ -57,9 +57,9 @@ public class DataManager: NSObject {
     
     - returns: Fetched entity or nil if it doesn't exist.
     */
-    public func fetchEntity(entityName: String, withID identifier: String) -> AnyObject? {
+    public func fetchEntity(entityName: String, withID identifier: Int64) -> AnyObject? {
 
-        return fetchEntity(entityName, withFieldKey: "identifier", withFieldValue: identifier)
+        return fetchEntity(entityName, withFieldKey: "id", withFieldValue: NSNumber.init(longLong: identifier))
     }
     
     /**
@@ -102,7 +102,7 @@ public class DataManager: NSObject {
     public func fetchEntities(entityName:String, relativeEntityName:String?, relativeID:String?, sortDescriptor:NSSortDescriptor?) -> AnyObject? {
         
         if relativeEntityName != nil && relativeID != nil {
-            let predicate: NSPredicate? = NSPredicate(format: "ANY %K.identifier = %@", relativeEntityName!, relativeID!)
+            let predicate: NSPredicate? = NSPredicate(format: "ANY %K.id = %@", relativeEntityName!, relativeID!)
             return fetchEntities(entityName, predicate: predicate, sortDescriptor: sortDescriptor)
         }
         
@@ -149,14 +149,14 @@ public class DataManager: NSObject {
     
     - returns: Newly created entity or nil if it is not found.
     */
-    public func createEntity(entityName: String, withID identifier: String) -> AnyObject? {
+    public func createEntity(entityName: String, withID identifier: Int64) -> AnyObject? {
         var object: AnyObject? = self.fetchEntity(entityName, withID: identifier)
         
         if object == nil {
             object = NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: self.context)
 
-            if (object?.respondsToSelector(Selector("setIdentifier")) != nil) {
-                object?.setValue(identifier, forKey: "identifier")
+            if (object?.respondsToSelector(Selector("setId")) != nil) {
+                object?.setValue(NSNumber.init(longLong: identifier), forKey: "id")
             }
         }
         
@@ -182,7 +182,7 @@ public class DataManager: NSObject {
     
     - returns: True if entity was deleted, false otherwise.
     */
-    public func deleteEntity(entityName: String, withID identifier: String) -> Bool {
+    public func deleteEntity(entityName: String, withID identifier: Int64) -> Bool {
         if let object = self.fetchEntity(entityName, withID: identifier) as? NSManagedObject {
             self.context.deleteObject(object)
             return true
@@ -233,6 +233,23 @@ public class DataManager: NSObject {
         
         return true
     }
+    
+    
+    public func userCreate(id: NSNumber,
+                           email: String,
+                           firstName: String,
+                           lastName: String,
+                           password: String,
+                           avatarImage: String) -> User? {
+                            
+                            
+        let user = DataManager.sharedInstance.createEntity("User", withID: 123)
+                            
+        return nil
+    }
+    
+    
+    
 
     // MARK: - FetchResultsController Methods
     /**
@@ -270,136 +287,32 @@ public class DataManager: NSObject {
     }
     
     /**
-    Create fetch results controller for parks.
+    Create fetch results controller for user data.
     
-    - returns: Fetch results controller for parks or nil.
+    - returns: Fetch results controller for the user or nil.
     */
-    public func parksController() -> NSFetchedResultsController? {
-        
-        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "identifier", ascending: true, selector: Selector("localizedStandardCompare:"))
-        let _ : NSPredicate = NSPredicate(format: "name!=nil AND name!=''")
-        let parksController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("Park", predicate: nil, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
-        
-        return parksController
+    public func userController() -> NSFetchedResultsController? {
+        if let registeredUserId = NSUserDefaults.standardUserDefaults().stringForKey(Constant.String.UserIdKey) {
+            let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
+            let _ : NSPredicate = NSPredicate(format: "id=\(registeredUserId)")
+            let userController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("User", predicate: nil, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
+            
+            return userController
+        }
+        return nil
     }
  
-    /**
-    Create fetch results controller for parks.
-    
-    - returns: Fetch results controller for parks or nil.
-    */
-    public func parkmediaThumbnailsController() -> NSFetchedResultsController? {
-        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "redemption.dateTime", ascending: false, selector: Selector("compare:"))
+    public func questionsController() -> NSFetchedResultsController? {
+        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
+        let questionController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("Question", predicate: nil, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
         
-        let thumbnailsController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("ParkmediaThumbnail", predicate: nil, sortDescriptor: sortDescriptor, sectionNameKeyPath: "redemption.identifier")
-        
-        return thumbnailsController
+        return questionController
     }
     
-    /**
-    Create user global achievements fetch controller.
-    
-    - parameter userId: User identifier.
-    
-    - returns: User global achievements controller or nil.
-    */
-    public func userGlobalAchievementsController(userId: String) -> NSFetchedResultsController? {
-        let userPredicate = NSPredicate(format: "user.identifier == %@", userId)
-        let noParkPredicate = NSPredicate(format: "park = nil")
-        let predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [userPredicate, noParkPredicate])
-        let sortDescriptor = NSSortDescriptor(key: "identifier", ascending: true, selector: Selector("localizedStandardCompare:"))
+    public func recordController(questionId: String) -> NSFetchedResultsController? {
+        let predicate = NSPredicate(format: "question.id = \(questionId)")
+        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
         
-        return self.fetchResultControllerWithEntityName("Achievement", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
-    }
-    
-    /**
-    Create park achievements fetch controller.
-    
-    - parameter parkId: Park identifier.
-    
-    - returns: Park achievements controller or nil.
-    */
-    public func parkAchievementsController(parkId: String) -> NSFetchedResultsController? {
-        let predicate = NSPredicate(format: "park.identifier == %@", parkId)
-        let sortDescriptor = NSSortDescriptor(key: "identifier", ascending: true, selector: Selector("localizedStandardCompare:"))
-        
-        return self.fetchResultControllerWithEntityName("Achievement", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
-    }
-    
-    /**
-    Create user achievements fetch controller.
-    
-    - parameter parkId: Park identifier.
-    - parameter userId: User identifier.
-    
-    - returns: User achievements controller or nil.
-    */
-    public func userAchievementsController(parkId: String, userId: String) -> NSFetchedResultsController? {
-        let parkIdPredicate = NSPredicate(format: "park.identifier == %@", parkId)
-        let userIdPredicate = NSPredicate(format: "user.identifier == %@", userId)
-        let predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [parkIdPredicate, userIdPredicate])
-        let sortDescriptor = NSSortDescriptor(key: "identifier", ascending: true, selector: Selector("localizedStandardCompare:"))
-        
-        return self.fetchResultControllerWithEntityName("Achievement", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
-    }
-    
-    /**
-    Create global achievements fetch controller.
-    
-    - returns: Global achievements controller or nil.
-    */
-    public func globalAchievementsController() -> NSFetchedResultsController? {
-        let noParkPredicate = NSPredicate(format: "park = nil")
-        let noUserPredicate = NSPredicate(format: "user = nil")
-        let predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [noUserPredicate, noParkPredicate])
-        let sortDescriptor = NSSortDescriptor(key: "identifier", ascending: true, selector: Selector("localizedStandardCompare:"))
-        
-        return self.fetchResultControllerWithEntityName("Achievement", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
-    }
-    
-    /**
-    Create ride fetch controller for park.
-    
-    - parameter parkID: Park identifier.
-    
-    - returns: Ride controller or nil.
-    */
-    public func rideControllerWithParkID(parkID: String?) -> NSFetchedResultsController? {
-        var predicate: NSPredicate? = nil
-        
-        if parkID != nil {
-            predicate = NSPredicate(format: "park.identifier == %@", parkID!)
-        }
-        
-        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "identifier", ascending: true, selector: Selector("localizedStandardCompare:"))
-        return self.fetchResultControllerWithEntityName("Ride", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
-    }
-    
-    /**
-    Create albums fetch controller for specific user.
-    
-    - parameter userID: User identifier.
-    
-    - returns: Albums controller or nil.
-    */
-    public func albumsControllerWithUserID(userID: String) -> NSFetchedResultsController? {
-        let predicate = NSPredicate(format: "user.identifier == %@", userID)
-        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "date", ascending: false, selector: Selector("compare:"))
-        
-        return self.fetchResultControllerWithEntityName("Album", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
-    }
-    
-    /**
-    Create album idems fetch controller.
-    
-    - parameter albumID: Album identifier.
-    
-    - returns: Album idems fetch controller.
-    */
-    public func albumItemsControllerWithAlbumID(albumID: String) -> NSFetchedResultsController? {
-        let predicate = NSPredicate(format: "album.identifier == %@", albumID)
-        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "date", ascending: false, selector: Selector("compare:"))
-        
-        return self.fetchResultControllerWithEntityName("AlbumItem", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
+        return self.fetchResultControllerWithEntityName("Record", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
     }
 }

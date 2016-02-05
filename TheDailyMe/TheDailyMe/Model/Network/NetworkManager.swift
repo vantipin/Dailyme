@@ -29,6 +29,9 @@ public class NetworkManager:CoreNetworkManager
         return identifer
     }
     
+    //Request API KEY
+    
+    
     //User API
     public func userCreate(user: User) -> String {
         if let id = user.id,
@@ -236,11 +239,30 @@ public class NetworkManager:CoreNetworkManager
     */
     override func processResponseData(requestType:RequestType, requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
         switch requestType {
+            //Test
         case RequestType.TestEndpoint:
             logDebug("\(data)")
             return true
+            //User
         case RequestType.UserCreate:
             return self.processUserCreate(requestIdentifier, data: data)
+        case RequestType.UserGet:
+            return self.processUserGet(requestIdentifier, data: data)
+        case RequestType.UserDelete:
+            return self.processUserDelete(requestIdentifier, data: data)
+        case RequestType.UserUpdate:
+            return self.processUserUpdate(requestIdentifier, data: data)
+        case RequestType.UserLogin:
+            return self.processUserLogin(requestIdentifier, data: data)
+            //Records
+        case RequestType.RecordGet:
+            return self.processRecordGet(requestIdentifier, data: data)
+        case RequestType.RecordCreate:
+            return self.processRecordCreate(requestIdentifier, data: data)
+        case RequestType.RecordDelete:
+            return self.processRecordDelete(requestIdentifier, data: data)
+        case RequestType.RecordUpdate:
+            return self.processRecordUpdate(requestIdentifier, data: data)
         default:
             logDebug("\(data)");
             return true

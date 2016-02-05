@@ -66,11 +66,16 @@ class RequestFactory
     */
     static func dataRequestWithMethod(method: String, endpoint: String, params: Dictionary<String, AnyObject>? = nil, eTag: String? = nil) -> NSURLRequest?
     {
-        if let request = RequestFactory.createBaseRequest(endpoint, method: method, eTag: eTag)
-        {
+        if let request = RequestFactory.createBaseRequest(endpoint, method: method, eTag: eTag) {
+            
+            if let apiKey = NSUserDefaults.standardUserDefaults().stringForKey(Constant.String.ApiKey) {
+                
+                request.addValue(apiKey, forHTTPHeaderField: "api_key")
+            }
+            
             if let bodyParams = params,
-                body = try? NSJSONSerialization.dataWithJSONObject(bodyParams, options: .PrettyPrinted)
-            {
+                body = try? NSJSONSerialization.dataWithJSONObject(bodyParams, options: .PrettyPrinted) {
+                    
                 request.addValue("\(body.length)", forHTTPHeaderField: "Content-Length")
                 request.HTTPBody = body
             }

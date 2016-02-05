@@ -27,6 +27,9 @@ struct Constant {
     
     struct String {
         
+        static let ApiKey = "API_KEY";
+        static let UserIdKey = "USER_ID_KEY";
+        
         struct Date {
             
             /// Default DateFormat (User in server side responses)
