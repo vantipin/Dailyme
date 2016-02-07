@@ -45,7 +45,7 @@ public class Parser: NSObject {
         
         for itemRAW in data {
             
-            if let identifier = itemRAW["id"] as? String,
+            if let identifier = itemRAW["id"] as? Int64,
                 item = DataManager.sharedInstance.createEntity(entityName, withID: identifier) as? NSManagedObject
             {
                 

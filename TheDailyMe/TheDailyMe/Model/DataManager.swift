@@ -163,6 +163,79 @@ public class DataManager: NSObject {
         return object
     }
     
+    
+
+    
+    public func setUser(id: NSNumber?,
+        email: String,
+        firstName: String?,
+        lastName: String?,
+        password: String?,
+        avatarImage: String?) -> User?
+    {
+        var object: User? = self.fetchEntity("User", withFieldKey: "email", withFieldValue: email) as? User
+        if object == nil {
+            object = NSEntityDescription.insertNewObjectForEntityForName("User", inManagedObjectContext: self.context) as? User
+        }
+        object?.email = email
+        
+        if id != nil {
+            object?.id = id
+        }
+        if firstName != nil {
+            object?.firstName = firstName
+        }
+        if lastName != nil {
+            object?.lastName = lastName
+        }
+        if password != nil {
+            object?.password = password
+        }
+        if avatarImage != nil {
+            object?.avatarImage = avatarImage
+        }
+        
+        return object
+    }
+    
+    public func setQuestion(id: NSNumber, text: String) -> Question?
+    {
+        var question: Question? = self.fetchEntity("Question", withFieldKey: "id", withFieldValue: id) as? Question
+        if question == nil {
+            question = (NSEntityDescription.insertNewObjectForEntityForName("Question", inManagedObjectContext: self.context) as! Question)
+            question!.id = id
+        }
+        question?.text = text
+        
+        return question
+    }
+    
+    
+    public func setRecord(id: NSNumber?,
+        answer: String,
+        note: String?,
+        var date: NSDate?,
+        question: Question) -> Record?
+    {
+            
+        var record : Record? = (id != nil) ? self.fetchEntity("Record", withFieldKey: "id", withFieldValue: id!) as? Record : nil
+        if record == nil {
+            record = (NSEntityDescription.insertNewObjectForEntityForName("Record", inManagedObjectContext: self.context) as! Record)
+            record!.id = id
+        }
+        record?.answer = answer
+        if note != nil {
+            record?.note = note
+        }
+        if date == nil {
+            date = NSDate();
+        }
+        record?.date = date
+        record?.question = question
+        
+        return record
+    }
+    
     // MARK: - Delete Methods
     
     /**
@@ -233,23 +306,6 @@ public class DataManager: NSObject {
         
         return true
     }
-    
-    
-    public func userCreate(id: NSNumber,
-                           email: String,
-                           firstName: String,
-                           lastName: String,
-                           password: String,
-                           avatarImage: String) -> User? {
-                            
-                            
-        let user = DataManager.sharedInstance.createEntity("User", withID: 123)
-                            
-        return nil
-    }
-    
-    
-    
 
     // MARK: - FetchResultsController Methods
     /**
@@ -292,7 +348,7 @@ public class DataManager: NSObject {
     - returns: Fetch results controller for the user or nil.
     */
     public func userController() -> NSFetchedResultsController? {
-        if let registeredUserId = NSUserDefaults.standardUserDefaults().stringForKey(Constant.String.UserIdKey) {
+        if let registeredUserId : NSNumber = NSUserDefaults.standardUserDefaults().objectForKey(Constant.String.UserIdKey) as? NSNumber {
             let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
             let _ : NSPredicate = NSPredicate(format: "id=\(registeredUserId)")
             let userController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("User", predicate: nil, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)

@@ -89,7 +89,7 @@ public class CoreNetworkManager: NSObject, NSURLSessionTaskDelegate, NSURLSessio
             self.notifySubscribersRequestFailed(type, requestIdentifier: identifier, httpCode: nil, customCode: .OfflineError)
         }
         else {
-            let medatadaIdentifier = "type=\(type.rawValue), identifier=\(identifier)"
+            let medatadaIdentifier : Int64 = Int64("\(type.rawValue)\(identifier)\(arc4random_uniform(1000000000))")!//"type=\(type.rawValue), identifier=\(identifier)"
             let cacheMedatada = DataManager.sharedInstance.fetchEntity("EndpointMetadata", withID: medatadaIdentifier) as?EndpointMetadata
             
             if cacheMedatada != nil && !ignoreCacheControl && cacheMedatada!.nextUpdateDate!.compare(NSDate()) == .OrderedDescending {
@@ -145,7 +145,7 @@ public class CoreNetworkManager: NSObject, NSURLSessionTaskDelegate, NSURLSessio
             self.notifySubscribersRequestFailed(type, requestIdentifier: url, httpCode: nil, customCode: .OfflineError)
         }
         else {
-            let medatadaIdentifier = "type=\(type.rawValue), identifier=\(url)"
+            let medatadaIdentifier : Int64 = Int64("\(type.rawValue)\(arc4random_uniform(1000000000))")!
             let cacheMedatada = DataManager.sharedInstance.fetchEntity("EndpointMetadata", withID: medatadaIdentifier) as?EndpointMetadata
             
             if cacheMedatada != nil && !ignoreCacheControl && cacheMedatada!.nextUpdateDate!.compare(NSDate()) == .OrderedDescending {

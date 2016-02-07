@@ -183,7 +183,7 @@ public class NetworkManager:CoreNetworkManager
     override func updateMetadata(response: NSURLResponse?, requestType:RequestType, requestIdentifier: String) {
         if let httpResponse = response as? NSHTTPURLResponse {
             let headers = httpResponse.allHeaderFields
-            let identifier = "type=\(requestType.rawValue), identifier=\(requestIdentifier)"
+            let identifier : Int64 = Int64("\(requestType.rawValue)\(requestIdentifier)\(arc4random_uniform(1000000000))")!
             
             if let eTag = headers["ETag"] as? String,
                 cacheControl = headers["Cache-Control"] as? String,
@@ -286,7 +286,62 @@ public class NetworkManager:CoreNetworkManager
     }
     
     func processUserLogin(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
-        return true;
+
+        if let userData = data["User"],
+           id : Int64 = userData["id"] as? Int64,
+           email = userData["email"] as? String,
+           firstName = userData["firstName"] as? String,
+           lastName = userData["lastName"] as? String,
+           password = userData["password"] as? String,
+           avatarImage = userData["avatarImage"] as? String {
+            
+            let userId : NSNumber = NSNumber.init(longLong: Int64(id))
+            DataManager.sharedInstance.setUser(userId,
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                password: password,
+                avatarImage: avatarImage)
+            
+            //NSUserDefaults.standardUserDefaults().stringForKey(Constant.String.UserIdKey)
+            
+            NSUserDefaults.standardUserDefaults().setObject(userId, forKey: Constant.String.UserIdKey)
+            
+            return true
+        }
+//        200
+//        Returns user profile in case of success login.
+//        ⇄
+//        User {
+//            id: integer
+//            email: string
+//            firstName: string
+//            lastName: string
+//            password: string
+//            avatarImage: string
+//        }
+//        400
+//        Invalid api key.
+//        ⇄
+//        Error {
+//            message: string
+//            code: string
+//        }
+//        401	
+//        Returns error message and code in case of unseccessful authentification.
+//        ⇄	
+//        Error {
+//            message: string
+//            code:	string
+//        }
+//        500	
+//        Internal server error.
+//        ⇄	
+//        Error {
+//            message: string
+//            code:	string
+//        }
+        return false;
     }
     
     func processRecordCreate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
