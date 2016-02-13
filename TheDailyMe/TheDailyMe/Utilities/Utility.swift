@@ -38,7 +38,7 @@ Get NSDate from String.
 
 - returns: Result NSDate.
 */
-public func dateFromString(string: String, format: String = "yyyy-MM-ddTHH:mm:ss") -> NSDate?
+public func dateFromString(string: String, format: String = "yyyy-MM-dd") -> NSDate?
 {
     let dateFormatter = NSDateFormatter()
     dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
@@ -54,9 +54,9 @@ Get date String from NSDate.
 - parameter format:        Date format string.
 - parameter escapeSymbols: Escape symbols.
 
-- returns: Date String
+- returns: Date String 
 */
-func dateToString(date: NSDate, format: String = "yyyy-MM-ddTHH:mm:ss", escapeSymbols: Bool = false) -> String?
+func dateToString(date: NSDate, format: String = "yyyy-MM-dd", escapeSymbols: Bool = false) -> String?
 {
     let dateFormatter = NSDateFormatter()
     dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
@@ -128,3 +128,18 @@ func unitString(count: Int) -> String {
     return count == 1 ? "" : "s"
 }
 
+
+func predicateForDayFromDate(date: NSDate, key: String) -> NSPredicate {
+    let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+    let components = calendar!.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: date)
+    components.hour = 00
+    components.minute = 00
+    components.second = 00
+    let startDate = calendar!.dateFromComponents(components)
+    components.hour = 23
+    components.minute = 59
+    components.second = 59
+    let endDate = calendar!.dateFromComponents(components)
+    
+    return NSPredicate(format: "\(key) >= %@ AND \(key) =< %@", argumentArray: [startDate!, endDate!])
+}

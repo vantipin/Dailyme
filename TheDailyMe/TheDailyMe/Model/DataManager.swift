@@ -75,7 +75,21 @@ public class DataManager: NSObject {
         
         let fetchRequest: NSFetchRequest = NSFetchRequest()
         let entity: NSEntityDescription = NSEntityDescription.entityForName(entityName, inManagedObjectContext: self.context)!
-        let predicate: NSPredicate = NSPredicate(format: "%K = %@", key, value as! String)
+        
+        var predicate: NSPredicate? = nil
+        if value.isKindOfClass(NSData) {
+            predicate = NSPredicate(format: "%K = %@", key, value as! NSData)
+        }
+        else if value.isKindOfClass(NSNumber) {
+            predicate = NSPredicate(format: "%K = %@", key, value as! NSNumber)
+        }
+        else if value.isKindOfClass(NSDate) {
+            predicate = NSPredicate(format: "%K = %@", key, value as! NSDate)
+        }
+        else {
+            predicate = NSPredicate(format: "%K = %@", key, value as! String)
+        }
+        
         
         fetchRequest.entity = entity
         fetchRequest.predicate = predicate
@@ -84,6 +98,22 @@ public class DataManager: NSObject {
         
         if entities.count > 0 {
             return entities.firstObject
+        }
+        
+        return nil
+    }
+    
+    public func fetchEntities(entityName: String, predicate: NSPredicate) -> [AnyObject]? {
+        let fetchRequest: NSFetchRequest = NSFetchRequest()
+        let entity: NSEntityDescription = NSEntityDescription.entityForName(entityName, inManagedObjectContext: self.context)!
+        
+        fetchRequest.entity = entity
+        fetchRequest.predicate = predicate
+        
+        let entities: NSArray = try! self.context.executeFetchRequest(fetchRequest)
+        
+        if entities.count > 0 {
+            return entities as [AnyObject]
         }
         
         return nil
@@ -139,6 +169,27 @@ public class DataManager: NSObject {
         return nil
     }
     
+    public func fetchQuestionForDate(date: NSDate = NSDate()) -> Question? {
+        
+        var question : Question? = nil;
+        let objects = self.fetchEntities("Question", predicate: predicateForDayFromDate(date, key: "assignedDate"))
+        if (objects != nil) {
+            question = objects?.first as? Question
+        }
+        
+        return question
+    }
+    
+    public func fetchRecordForDate(date: NSDate = NSDate()) -> Record? {
+        
+        var record : Record? = nil;
+        let objects = self.fetchEntities("Record", predicate: predicateForDayFromDate(date, key: "date"))
+        if (objects != nil) {
+            record = objects?.first as? Record
+        }
+        
+        return record
+    }
    
     // MARK: - Create Methods
     /**
@@ -171,7 +222,7 @@ public class DataManager: NSObject {
         firstName: String?,
         lastName: String?,
         password: String?,
-        avatarImage: String?) -> User?
+        avatarImage: NSData?) -> User?
     {
         var object: User? = self.fetchEntity("User", withFieldKey: "email", withFieldValue: email) as? User
         if object == nil {
@@ -195,10 +246,12 @@ public class DataManager: NSObject {
             object?.avatarImage = avatarImage
         }
         
+        self.saveContext()
+        
         return object
     }
     
-    public func setQuestion(id: NSNumber, text: String) -> Question?
+    public func setQuestion(id: NSNumber, text: String, assignDate: NSDate) -> Question?
     {
         var question: Question? = self.fetchEntity("Question", withFieldKey: "id", withFieldValue: id) as? Question
         if question == nil {
@@ -206,6 +259,9 @@ public class DataManager: NSObject {
             question!.id = id
         }
         question?.text = text
+        question?.assignedDate = assignDate
+        
+        self.saveContext()
         
         return question
     }
@@ -232,6 +288,8 @@ public class DataManager: NSObject {
         }
         record?.date = date
         record?.question = question
+        
+        self.saveContext()
         
         return record
     }

@@ -13,6 +13,10 @@
 		5C62B1001C63BC9C00EFE341 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62B0FA1C63BC9C00EFE341 /* Record.swift */; };
 		5C62B1011C63BC9C00EFE341 /* Question+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62B0FB1C63BC9C00EFE341 /* Question+CoreDataProperties.swift */; };
 		5C62B1021C63BC9C00EFE341 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62B0FC1C63BC9C00EFE341 /* Question.swift */; };
+		5C62B1041C6A804800EFE341 /* DailyMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62B1031C6A804800EFE341 /* DailyMeViewController.swift */; };
+		5C62B1071C6F953200EFE341 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62B1061C6F953200EFE341 /* RecordView.swift */; };
+		5C62B1091C6FA1A400EFE341 /* DiaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62B1081C6FA1A400EFE341 /* DiaryViewController.swift */; };
+		5C62B10B1C6FA54100EFE341 /* NoteTodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C62B10A1C6FA54100EFE341 /* NoteTodayViewController.swift */; };
 		5C8CC8AD1C5943EE00CE3504 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8AC1C5943EE00CE3504 /* AppDelegate.swift */; };
 		5C8CC8B21C5943EE00CE3504 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C8CC8B01C5943EE00CE3504 /* Main.storyboard */; };
 		5C8CC8B51C5943EE00CE3504 /* TheDailyMe.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8B31C5943EE00CE3504 /* TheDailyMe.xcdatamodeld */; };
@@ -20,7 +24,6 @@
 		5C8CC8BA1C5943EE00CE3504 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C8CC8B81C5943EE00CE3504 /* LaunchScreen.storyboard */; };
 		5C8CC8C51C5943EE00CE3504 /* TheDailyMeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8C41C5943EE00CE3504 /* TheDailyMeTests.swift */; };
 		5C8CC8D01C5943EE00CE3504 /* TheDailyMeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8CF1C5943EE00CE3504 /* TheDailyMeUITests.swift */; };
-		5C8CC8E01C59447400CE3504 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8DE1C59447400CE3504 /* ViewController.swift */; };
 		5C8CC8E91C5944F300CE3504 /* CoreNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8E21C5944F300CE3504 /* CoreNetworkManager.swift */; };
 		5C8CC8EB1C5944F300CE3504 /* NetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8E51C5944F300CE3504 /* NetworkHelper.swift */; };
 		5C8CC8EC1C5944F300CE3504 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8E61C5944F300CE3504 /* NetworkManager.swift */; };
@@ -29,7 +32,6 @@
 		5C8CC8F41C59459D00CE3504 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8F11C59459D00CE3504 /* DataManager.swift */; };
 		5C8CC8F51C59459D00CE3504 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8F21C59459D00CE3504 /* Parser.swift */; };
 		5C8CC8F81C59461100CE3504 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8F71C59461100CE3504 /* Logging.swift */; };
-		5C8CC8FB1C59468C00CE3504 /* Enumerations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8F91C59468C00CE3504 /* Enumerations.swift */; };
 		5C8CC8FC1C59468C00CE3504 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8FA1C59468C00CE3504 /* Protocols.swift */; };
 		5C8CC8FE1C5946F700CE3504 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8FD1C5946F700CE3504 /* Constant.swift */; };
 		5C8CC9001C59473500CE3504 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8FF1C59473500CE3504 /* Utility.swift */; };
@@ -61,6 +63,10 @@
 		5C62B0FA1C63BC9C00EFE341 /* Record.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		5C62B0FB1C63BC9C00EFE341 /* Question+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Question+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5C62B0FC1C63BC9C00EFE341 /* Question.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
+		5C62B1031C6A804800EFE341 /* DailyMeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyMeViewController.swift; sourceTree = "<group>"; };
+		5C62B1061C6F953200EFE341 /* RecordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
+		5C62B1081C6FA1A400EFE341 /* DiaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiaryViewController.swift; sourceTree = "<group>"; };
+		5C62B10A1C6FA54100EFE341 /* NoteTodayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteTodayViewController.swift; sourceTree = "<group>"; };
 		5C8CC8A91C5943ED00CE3504 /* TheDailyMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheDailyMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C8CC8AC1C5943EE00CE3504 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5C8CC8B11C5943EE00CE3504 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -74,7 +80,6 @@
 		5C8CC8CB1C5943EE00CE3504 /* TheDailyMeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheDailyMeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C8CC8CF1C5943EE00CE3504 /* TheDailyMeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheDailyMeUITests.swift; sourceTree = "<group>"; };
 		5C8CC8D11C5943EE00CE3504 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5C8CC8DE1C59447400CE3504 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		5C8CC8E21C5944F300CE3504 /* CoreNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreNetworkManager.swift; sourceTree = "<group>"; };
 		5C8CC8E51C5944F300CE3504 /* NetworkHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkHelper.swift; sourceTree = "<group>"; };
 		5C8CC8E61C5944F300CE3504 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -83,7 +88,6 @@
 		5C8CC8F11C59459D00CE3504 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		5C8CC8F21C59459D00CE3504 /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		5C8CC8F71C59461100CE3504 /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
-		5C8CC8F91C59468C00CE3504 /* Enumerations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enumerations.swift; sourceTree = "<group>"; };
 		5C8CC8FA1C59468C00CE3504 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		5C8CC8FD1C5946F700CE3504 /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		5C8CC8FF1C59473500CE3504 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
@@ -116,6 +120,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C62B1051C6F94FB00EFE341 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5C62B1061C6F953200EFE341 /* RecordView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		5C8CC8A01C5943ED00CE3504 = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +151,7 @@
 		5C8CC8AB1C5943EE00CE3504 /* TheDailyMe */ = {
 			isa = PBXGroup;
 			children = (
+				5C62B1051C6F94FB00EFE341 /* Views */,
 				5C8CC8F61C59461100CE3504 /* Utilities */,
 				5C8CC8DD1C59447400CE3504 /* Controllers */,
 				5C8CC8DF1C59447400CE3504 /* Model */,
@@ -172,7 +185,9 @@
 		5C8CC8DD1C59447400CE3504 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				5C8CC8DE1C59447400CE3504 /* ViewController.swift */,
+				5C62B1031C6A804800EFE341 /* DailyMeViewController.swift */,
+				5C62B1081C6FA1A400EFE341 /* DiaryViewController.swift */,
+				5C62B10A1C6FA54100EFE341 /* NoteTodayViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -221,7 +236,6 @@
 			children = (
 				5C8CC8FF1C59473500CE3504 /* Utility.swift */,
 				5C8CC8FD1C5946F700CE3504 /* Constant.swift */,
-				5C8CC8F91C59468C00CE3504 /* Enumerations.swift */,
 				5C8CC8FA1C59468C00CE3504 /* Protocols.swift */,
 				5C8CC8F71C59461100CE3504 /* Logging.swift */,
 			);
@@ -362,20 +376,22 @@
 				5C62B0FF1C63BC9C00EFE341 /* Record+CoreDataProperties.swift in Sources */,
 				5C8CC8F81C59461100CE3504 /* Logging.swift in Sources */,
 				5C8CC90B1C594FF100CE3504 /* EndpointMetadata.swift in Sources */,
-				5C8CC8E01C59447400CE3504 /* ViewController.swift in Sources */,
 				5C8CC9001C59473500CE3504 /* Utility.swift in Sources */,
 				5C62B1011C63BC9C00EFE341 /* Question+CoreDataProperties.swift in Sources */,
+				5C62B1091C6FA1A400EFE341 /* DiaryViewController.swift in Sources */,
 				5C8CC8B51C5943EE00CE3504 /* TheDailyMe.xcdatamodeld in Sources */,
 				5C8CC8EE1C5944F300CE3504 /* RequestFactory.swift in Sources */,
 				5C8CC8FE1C5946F700CE3504 /* Constant.swift in Sources */,
-				5C8CC8FB1C59468C00CE3504 /* Enumerations.swift in Sources */,
 				5C62B0FD1C63BC9C00EFE341 /* User+CoreDataProperties.swift in Sources */,
 				5C8CC8EB1C5944F300CE3504 /* NetworkHelper.swift in Sources */,
 				5C62B1001C63BC9C00EFE341 /* Record.swift in Sources */,
 				5C8CC8AD1C5943EE00CE3504 /* AppDelegate.swift in Sources */,
+				5C62B1071C6F953200EFE341 /* RecordView.swift in Sources */,
 				5C8CC8F51C59459D00CE3504 /* Parser.swift in Sources */,
 				5C8CC8E91C5944F300CE3504 /* CoreNetworkManager.swift in Sources */,
 				5C8CC8F31C59459D00CE3504 /* NSManagedObject+JSON.swift in Sources */,
+				5C62B1041C6A804800EFE341 /* DailyMeViewController.swift in Sources */,
+				5C62B10B1C6FA54100EFE341 /* NoteTodayViewController.swift in Sources */,
 				5C8CC8FC1C59468C00CE3504 /* Protocols.swift in Sources */,
 				5C62B1021C63BC9C00EFE341 /* Question.swift in Sources */,
 				5C8CC8EC1C5944F300CE3504 /* NetworkManager.swift in Sources */,

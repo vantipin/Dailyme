@@ -39,6 +39,7 @@ public class NetworkManager:CoreNetworkManager
             firstName = user.firstName,
             lastName = user.lastName,
             password = user.password,
+            birthDate = user.birthDate,
             avatarImage = user.avatarImage {
                 
                 let identifer = "createUser\(id.integerValue)"
@@ -47,6 +48,7 @@ public class NetworkManager:CoreNetworkManager
                     "firstName": firstName,
                     "lastName": lastName,
                     "password": password,
+                    "birthDate": birthDate,
                     "avatarImage": avatarImage]
                 self.sendDataRequest("POST", endpoint: Constant.String.Endpoint.userCreate, type: RequestType.UserCreate, identifier: identifer, params: params)
                 
@@ -74,6 +76,7 @@ public class NetworkManager:CoreNetworkManager
             firstName = user.firstName,
             lastName = user.lastName,
             password = user.password,
+            birthDate = user.birthDate,
             avatarImage = user.avatarImage {
                 
                 let identifer = "updateUser\(id.integerValue)"
@@ -81,6 +84,7 @@ public class NetworkManager:CoreNetworkManager
                     "email": email,
                     "firstName": firstName,
                     "lastName": lastName,
+                    "birthDate": birthDate,
                     "password": password,
                     "avatarImage": avatarImage]
                 self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.user)\(user.id)", type: RequestType.UserUpdate, identifier: identifer, params: params)
@@ -107,10 +111,12 @@ public class NetworkManager:CoreNetworkManager
             date = record.date,
             stringDate = dateToString(date),
             questionId = question.id,
-            questionText = question.text {
+            questionText = question.text,
+            questionDate = question.assignedDate,
+            stringAssignDate = dateToString(questionDate) {
                 
                 let identifer = "createRecord\(record.id?.integerValue)"
-                let questionParams = ["id" : questionId, "text" : questionText];
+                let questionParams = ["id" : questionId, "text" : questionText, "assignedDate" : stringAssignDate];
                 let params : [String : AnyObject] = ["id": id,
                     "answer": answer,
                     "note": note,
@@ -137,10 +143,12 @@ public class NetworkManager:CoreNetworkManager
             date = record.date,
             stringDate = dateToString(date),
             questionId = question.id,
-            questionText = question.text {
+            questionText = question.text,
+            questionDate = question.assignedDate,
+            stringAssignDate = dateToString(questionDate) {
                 
                 let identifer = "updateRecord\(record.id?.integerValue)"
-                let questionParams = ["id" : questionId, "text" : questionText];
+                let questionParams = ["id" : questionId, "text" : questionText, "assignedDate" : stringAssignDate];
                 let params : [String : AnyObject] = ["id": id,
                     "answer": answer,
                     "note": note,
@@ -293,7 +301,7 @@ public class NetworkManager:CoreNetworkManager
            firstName = userData["firstName"] as? String,
            lastName = userData["lastName"] as? String,
            password = userData["password"] as? String,
-           avatarImage = userData["avatarImage"] as? String {
+           avatarImage = userData["avatarImage"] as? NSData {
             
             let userId : NSNumber = NSNumber.init(longLong: Int64(id))
             DataManager.sharedInstance.setUser(userId,

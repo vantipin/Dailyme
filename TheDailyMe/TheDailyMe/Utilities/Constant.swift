@@ -29,6 +29,8 @@ struct Constant {
         
         static let ApiKey = "API_KEY";
         static let UserIdKey = "USER_ID_KEY";
+        static let Font = "Helvetica"
+        static let FontBold = "Helvetica-Bold"
         
         struct Date {
             
@@ -40,7 +42,8 @@ struct Constant {
         }
         
         struct Segue {
-            
+            static let menuSegueId = "menuSegueId"
+            static let addNoteSegueId = "addNoteSegueId"
         }
         
         struct Endpoint {
@@ -62,7 +65,45 @@ struct Constant {
         struct Notification {
             
         }
-        
+    
     }
 
+}
+
+public enum ErrorCode: String
+{
+    case Success = "success"
+    case UnknownError = "unknown_error"
+    case OfflineError = "offline_error"
+    case ResponseApplyingError = "applying_error"
+    case FrameworkError = "framework_error"
+    case ResponseParsingError = "response_parsing_error"
+    
+}
+
+public enum RequestType: Int
+{
+    case DownloadFile
+    
+    //test
+    case TestEndpoint
+    
+    //User
+    case UserCreate
+    case UserGet
+    case UserDelete
+    case UserUpdate
+    case UserLogin
+    
+    //Records
+    case RecordCreate
+    case RecordGet
+    case RecordUpdate
+    case RecordDelete
+}
+
+enum AuthorizationType: Int
+{
+    case Login
+    case Register
 }

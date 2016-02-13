@@ -8,7 +8,7 @@
         <!--The Daily Me-->
         <scene sceneID="Q2j-HV-PWb">
             <objects>
-                <viewController title="The Daily Me" id="fN5-T7-WI3" customClass="ViewController" customModule="TheDailyMe" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="The Daily Me" id="fN5-T7-WI3" customClass="DailyMeViewController" customModule="TheDailyMe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dJx-Mu-baU"/>
                         <viewControllerLayoutGuide type="bottom" id="epv-tr-Xrh"/>
@@ -17,23 +17,56 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1 January 2016" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fzN-i2-iq9">
-                                <rect key="frame" x="95" y="72" width="184" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Your goals for this year?" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ctg-NL-ihc">
-                                <rect key="frame" x="20" y="116" width="335" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iJ0-o1-fbh">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Tap on the screen to start writing"/>
-                            </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kzN-Q0-7Nh" customClass="RecordView" customModule="TheDailyMe" customModuleProvider="target">
+                                <rect key="frame" x="20" y="68" width="335" height="296"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EHe-jO-0jc">
+                                        <rect key="frame" x="8" y="45" width="319" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <string key="text">Question: Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6oU-gY-kkq">
+                                        <rect key="frame" x="8" y="93" width="319" height="110"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <mutableString key="text">Answer: Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="fN5-T7-WI3" id="NbH-ZN-axg"/>
+                                        </connections>
+                                    </textView>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lcy-Vx-EfE">
+                                        <rect key="frame" x="8" y="211" width="319" height="76"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <mutableString key="text">Note: Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="21 January 2016" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NF0-nf-d4z">
+                                        <rect key="frame" x="8" y="8" width="319" height="29"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <color key="textColor" red="0.53333333329999999" green="0.82352941180000006" blue="0.26274509800000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iJ0-o1-fbh">
+                                        <rect key="frame" x="-20" y="0.0" width="375" height="603"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                        <state key="normal" title="Tap on the screen to start writing"/>
+                                        <connections>
+                                            <action selector="answer:" destination="fN5-T7-WI3" eventType="touchUpInside" id="afv-HC-Xft"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="labelDate" destination="NF0-nf-d4z" id="CRO-bb-ucX"/>
+                                    <outlet property="textViewAnswer" destination="6oU-gY-kkq" id="P9D-dZ-Z3f"/>
+                                    <outlet property="textViewNote" destination="Lcy-Vx-EfE" id="nUV-0o-3fO"/>
+                                    <outlet property="textViewQuestion" destination="EHe-jO-0jc" id="Ffs-lN-Q1p"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -47,7 +80,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="83" height="33"/>
                                         <state key="normal" title="+Note"/>
                                         <connections>
-                                            <segue destination="mpt-RM-0ko" kind="show" id="64Z-Zj-e8G"/>
+                                            <segue destination="gIg-Id-gm5" kind="show" identifier="addNoteSegueId" id="tut-yP-0zH"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -62,13 +95,20 @@
                                         <rect key="frame" x="0.0" y="0.0" width="83" height="33"/>
                                         <state key="normal" title="Menu"/>
                                         <connections>
-                                            <segue destination="uYs-V5-bYP" kind="show" id="fXQ-W9-Evh"/>
+                                            <action selector="menu:" destination="fN5-T7-WI3" eventType="touchUpInside" id="ycn-51-FAj"/>
                                         </connections>
                                     </button>
                                 </subviews>
                             </view>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="buttonAddNote" destination="jWe-YN-sh4" id="y3i-XG-fYX"/>
+                        <outlet property="buttonAnswer" destination="iJ0-o1-fbh" id="ueT-jm-iCa"/>
+                        <outlet property="buttonMenu" destination="hUO-Kp-aTc" id="AEP-x4-4gk"/>
+                        <outlet property="recordView" destination="kzN-Q0-7Nh" id="u4d-3p-QLD"/>
+                        <segue destination="uYs-V5-bYP" kind="show" identifier="menuSegueId" id="JXN-8V-WME"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wwz-eY-WlR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -136,35 +176,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YgT-Hu-NhV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-57.5" y="451.5"/>
-        </scene>
-        <!--Note for today-->
-        <scene sceneID="UXl-5F-d8c">
-            <objects>
-                <viewController id="mpt-RM-0ko" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="dUV-NG-VYF"/>
-                        <viewControllerLayoutGuide type="bottom" id="s0u-ko-fcC"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="G2r-Sf-i5V">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ijz-bL-icP">
-                                <rect key="frame" x="20" y="85" width="335" height="562"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Note for today" id="Y2i-x8-EdB"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="O3p-hw-ck4" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="491.5" y="-408.5"/>
+            <point key="canvasLocation" x="-81.5" y="735.5"/>
         </scene>
         <!--Menu-->
         <scene sceneID="GOv-vT-p0s">
@@ -234,7 +246,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="02A-FX-drB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="491.5" y="-1186.5"/>
+            <point key="canvasLocation" x="467.5" y="-1718.5"/>
         </scene>
         <!--Title-->
         <scene sceneID="Fah-tT-fWC">
@@ -529,11 +541,45 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IM8-3n-qbh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="491.5" y="451.5"/>
+            <point key="canvasLocation" x="467.5" y="735.5"/>
+        </scene>
+        <!--Note for today-->
+        <scene sceneID="kk1-g1-rNp">
+            <objects>
+                <viewController id="gIg-Id-gm5" customClass="NoteTodayViewController" customModule="TheDailyMe" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="unf-qz-2Ir"/>
+                        <viewControllerLayoutGuide type="bottom" id="40Y-7d-h0w"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="lJG-y1-De6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="S95-0T-W82">
+                                <rect key="frame" x="20" y="85" width="335" height="562"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="delegate" destination="gIg-Id-gm5" id="A6b-f0-Fm7"/>
+                                </connections>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Note for today" id="lqw-Lq-hUi"/>
+                    <connections>
+                        <outlet property="textViewNote" destination="S95-0T-W82" id="tlV-QN-dZG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0oK-dn-vAh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="467.5" y="-926.5"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="sj9-K1-zhv"/>
+        <segue reference="gJY-jz-JDM"/>
         <segue reference="Oft-kc-QC4"/>
         <segue reference="Ael-1H-wgu"/>
     </inferredMetricsTieBreakers>

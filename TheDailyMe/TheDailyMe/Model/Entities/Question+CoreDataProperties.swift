@@ -16,6 +16,7 @@ extension Question {
 
     @NSManaged var id: NSNumber?
     @NSManaged var text: String?
+    @NSManaged var assignedDate: NSDate?
     @NSManaged var record: NSSet?
 
 }

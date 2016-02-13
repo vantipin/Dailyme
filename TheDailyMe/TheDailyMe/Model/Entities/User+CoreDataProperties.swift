@@ -19,6 +19,7 @@ extension User {
     @NSManaged var firstName: String?
     @NSManaged var lastName: String?
     @NSManaged var password: String?
-    @NSManaged var avatarImage: String?
+    @NSManaged var birthDate: NSDate?
+    @NSManaged var avatarImage: NSData?
 
 }
