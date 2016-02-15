@@ -44,6 +44,7 @@ struct Constant {
         struct Segue {
             static let menuSegueId = "menuSegueId"
             static let addNoteSegueId = "addNoteSegueId"
+            static let diarySegueId = "DiarySegueId"
         }
         
         struct Endpoint {

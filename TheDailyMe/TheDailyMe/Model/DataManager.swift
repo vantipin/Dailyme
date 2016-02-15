@@ -190,6 +190,16 @@ public class DataManager: NSObject {
         
         return record
     }
+    
+    public func fetchQuestionsInMonthForDate(date: NSDate = NSDate())->[Question]? {
+        var questions: [Question]? = nil
+        let objects = fetchEntities("Question", predicate: predicateForMonthFromDate(date, key: "assignedDate"))
+        if (objects != nil) {
+            questions = objects as? [Question]
+        }
+        
+        return questions
+    }
    
     // MARK: - Create Methods
     /**

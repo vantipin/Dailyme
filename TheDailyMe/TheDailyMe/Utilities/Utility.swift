@@ -143,3 +143,23 @@ func predicateForDayFromDate(date: NSDate, key: String) -> NSPredicate {
     
     return NSPredicate(format: "\(key) >= %@ AND \(key) =< %@", argumentArray: [startDate!, endDate!])
 }
+
+func predicateForMonthFromDate(date: NSDate, key: String) -> NSPredicate {
+    let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+    //let components = calendar!.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: date)
+    let components = calendar!.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: date)
+    components.hour = 00
+    components.minute = 00
+    components.second = 00
+    let startOfMonth = calendar!.dateFromComponents(components)!
+    
+    let comps2 = NSDateComponents()
+    comps2.hour = 23
+    comps2.minute = 59
+    comps2.second = 59
+    comps2.month = 1
+    comps2.day = -1
+    let endOfMonth = calendar!.dateByAddingComponents(comps2, toDate: startOfMonth, options: [])!
+    
+    return NSPredicate(format: "\(key) >= %@ AND \(key) =< %@", argumentArray: [startOfMonth, endOfMonth])
+}

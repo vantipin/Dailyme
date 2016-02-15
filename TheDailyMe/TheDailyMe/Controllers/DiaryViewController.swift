@@ -8,30 +8,54 @@
 
 import Foundation
 import UIKit
+import CVCalendar
 
-class DiaryViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
+public class DiaryViewController : UITableViewController {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+    public var date: CVDate!
+    public var questionSource: NSMutableArray = NSMutableArray()
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        
     }
     
-    func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
+    public override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if let dateVal = date.convertedDate(),
+             questions = DataManager.sharedInstance.fetchQuestionsInMonthForDate(dateVal) {
+                //get all question within selected month
+                questionSource.removeAllObjects()
+                questionSource.addObjectsFromArray(questions)
+        }
+    }
+    
+    public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return questionSource.count
+    }
+    
+    public override func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("CellIdentifier", forIndexPath: indexPath) as UITableViewCell
+    public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell : RecordTableViewCell = tableView.dequeueReusableCellWithIdentifier("RecordViewCellId", forIndexPath: indexPath) as! RecordTableViewCell
         
-        //configure your cell
+        cell.recordView.textViewAnswer.text = ""
+        cell.recordView.textViewNote.text = ""
+        
+        if let question: Question = questionSource[indexPath.row] as? Question {
+            cell.recordView.setQuestion(question)
+            
+            if let record: Record = question.record?.anyObject() as? Record {
+                cell.recordView.setRecord(record)
+            }
+        }
         
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 0;
-    }
-    
-    @IBAction func addNote(sender: UIButton) {
-        
-    }
+//  public override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//        return 0;
+//    }
 }

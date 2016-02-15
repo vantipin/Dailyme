@@ -20,6 +20,7 @@ public class NoteTodayViewController: UIViewController, UITextViewDelegate, UITe
         
         if let text = record.note {
             textViewNote.text = text
+            textViewNote.textContainerInset = UIEdgeInsetsZero
         }
     }
     

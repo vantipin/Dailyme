@@ -29,14 +29,20 @@ class DailyMeViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         buttonAnswer.titleLabel?.numberOfLines = 2
         buttonAnswer.setTitleColor(UIColor.grayColor(), forState: UIControlState.Normal)
         buttonAnswer.titleLabel?.layoutMargins = UIEdgeInsets(top: 10, left: 100, bottom: 10, right: 100)
-        
-        //self.createTestQuestions()
     }
     
     override func viewWillAppear(animated: Bool) {
         if let questionCheck = DataManager.sharedInstance.fetchQuestionForDate(date) {
             question = questionCheck
             recordView.setQuestion(questionCheck)
+        }
+        else {
+            //create MOCK
+            self.createTestQuestions()
+            if let questionCheck = DataManager.sharedInstance.fetchQuestionForDate(date) {
+                question = questionCheck
+                recordView.setQuestion(questionCheck)
+            }
         }
         
         if let recordCheck = DataManager.sharedInstance.fetchRecordForDate(date) {
