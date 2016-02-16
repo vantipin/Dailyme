@@ -40,6 +40,7 @@
 		5C8CC9001C59473500CE3504 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC8FF1C59473500CE3504 /* Utility.swift */; };
 		5C8CC90A1C594FF100CE3504 /* EndpointMetadata+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC9081C594FF100CE3504 /* EndpointMetadata+CoreDataProperties.swift */; };
 		5C8CC90B1C594FF100CE3504 /* EndpointMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC9091C594FF100CE3504 /* EndpointMetadata.swift */; };
+		5C9F42B01C730C150037BEF2 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5C9F42AF1C730C150037BEF2 /* test.jpg */; };
 		6CEDD7ABB8B14B02844A2B6D /* Pods_TheDailyMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A601B635471D697421D27636 /* Pods_TheDailyMe.framework */; };
 /* End PBXBuildFile section */
 
@@ -100,6 +101,7 @@
 		5C8CC8FF1C59473500CE3504 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		5C8CC9081C594FF100CE3504 /* EndpointMetadata+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EndpointMetadata+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5C8CC9091C594FF100CE3504 /* EndpointMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointMetadata.swift; sourceTree = "<group>"; };
+		5C9F42AF1C730C150037BEF2 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
 		A474CB7E03DACDDBCC5B0795 /* Pods-TheDailyMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TheDailyMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TheDailyMe/Pods-TheDailyMe.debug.xcconfig"; sourceTree = "<group>"; };
 		A601B635471D697421D27636 /* Pods_TheDailyMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TheDailyMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB168E01DBF2C57FDB3883C7 /* Pods-TheDailyMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TheDailyMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-TheDailyMe/Pods-TheDailyMe.release.xcconfig"; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				5C8CC8B61C5943EE00CE3504 /* Assets.xcassets */,
 				5C8CC8B81C5943EE00CE3504 /* LaunchScreen.storyboard */,
 				5C8CC8BB1C5943EE00CE3504 /* Info.plist */,
+				5C9F42AF1C730C150037BEF2 /* test.jpg */,
 			);
 			path = TheDailyMe;
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 				5C8CC8BA1C5943EE00CE3504 /* LaunchScreen.storyboard in Resources */,
 				5C8CC8B71C5943EE00CE3504 /* Assets.xcassets in Resources */,
 				5C8CC8B21C5943EE00CE3504 /* Main.storyboard in Resources */,
+				5C9F42B01C730C150037BEF2 /* test.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

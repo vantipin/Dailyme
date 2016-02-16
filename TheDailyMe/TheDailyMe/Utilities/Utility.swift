@@ -151,6 +151,7 @@ func predicateForMonthFromDate(date: NSDate, key: String) -> NSPredicate {
     components.hour = 00
     components.minute = 00
     components.second = 00
+    components.day = 1
     let startOfMonth = calendar!.dateFromComponents(components)!
     
     let comps2 = NSDateComponents()
