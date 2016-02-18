@@ -38,7 +38,10 @@ class CalendarViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == Constant.String.Segue.diarySegueId {
             let controller : DiaryViewController = segue.destinationViewController as! DiaryViewController
-            controller.date = sender as! CVDate
+            controller.calendarHidden = true
+            if let date: CVDate = sender as? CVDate {
+                controller.date = date.convertedDate()
+            }
         }
     }
     

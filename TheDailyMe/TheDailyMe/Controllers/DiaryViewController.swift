@@ -12,7 +12,10 @@ import CVCalendar
 
 public class DiaryViewController : UITableViewController {
     
-    public var date: CVDate!
+    @IBOutlet weak var buttonCalendar : UIButton!
+    
+    public var calendarHidden : Bool = false
+    public var date: NSDate!
     public var questionSource: NSMutableArray = NSMutableArray()
     
     public override func viewDidLoad() {
@@ -22,8 +25,8 @@ public class DiaryViewController : UITableViewController {
     
     public override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if let dateVal = date.convertedDate(),
-             questions = DataManager.sharedInstance.fetchQuestionsInMonthForDate(dateVal) {
+        buttonCalendar.hidden = calendarHidden
+        if let questions = DataManager.sharedInstance.fetchQuestionsInMonthForDate(date) {
                 //get all question within selected month
                 questionSource.removeAllObjects()
                 questionSource.addObjectsFromArray(questions)

@@ -41,6 +41,7 @@
 		5C8CC90A1C594FF100CE3504 /* EndpointMetadata+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC9081C594FF100CE3504 /* EndpointMetadata+CoreDataProperties.swift */; };
 		5C8CC90B1C594FF100CE3504 /* EndpointMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8CC9091C594FF100CE3504 /* EndpointMetadata.swift */; };
 		5C9F42B01C730C150037BEF2 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5C9F42AF1C730C150037BEF2 /* test.jpg */; };
+		5C9F42B31C73E7420037BEF2 /* CalendarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9F42B21C73E7420037BEF2 /* CalendarTableViewController.swift */; };
 		6CEDD7ABB8B14B02844A2B6D /* Pods_TheDailyMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A601B635471D697421D27636 /* Pods_TheDailyMe.framework */; };
 /* End PBXBuildFile section */
 
@@ -102,6 +103,7 @@
 		5C8CC9081C594FF100CE3504 /* EndpointMetadata+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EndpointMetadata+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5C8CC9091C594FF100CE3504 /* EndpointMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointMetadata.swift; sourceTree = "<group>"; };
 		5C9F42AF1C730C150037BEF2 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
+		5C9F42B21C73E7420037BEF2 /* CalendarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarTableViewController.swift; sourceTree = "<group>"; };
 		A474CB7E03DACDDBCC5B0795 /* Pods-TheDailyMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TheDailyMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TheDailyMe/Pods-TheDailyMe.debug.xcconfig"; sourceTree = "<group>"; };
 		A601B635471D697421D27636 /* Pods_TheDailyMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TheDailyMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB168E01DBF2C57FDB3883C7 /* Pods-TheDailyMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TheDailyMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-TheDailyMe/Pods-TheDailyMe.release.xcconfig"; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				5C62B1081C6FA1A400EFE341 /* DiaryViewController.swift */,
 				5C62B10A1C6FA54100EFE341 /* NoteTodayViewController.swift */,
 				5C62B10C1C709F4300EFE341 /* CalendarViewController.swift */,
+				5C9F42B21C73E7420037BEF2 /* CalendarTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -465,6 +468,7 @@
 				5C62B0FF1C63BC9C00EFE341 /* Record+CoreDataProperties.swift in Sources */,
 				5C8CC8F81C59461100CE3504 /* Logging.swift in Sources */,
 				5C8CC90B1C594FF100CE3504 /* EndpointMetadata.swift in Sources */,
+				5C9F42B31C73E7420037BEF2 /* CalendarTableViewController.swift in Sources */,
 				5C8CC9001C59473500CE3504 /* Utility.swift in Sources */,
 				5C62B1011C63BC9C00EFE341 /* Question+CoreDataProperties.swift in Sources */,
 				5C62B1091C6FA1A400EFE341 /* DiaryViewController.swift in Sources */,
