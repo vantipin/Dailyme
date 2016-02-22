@@ -164,3 +164,30 @@ func predicateForMonthFromDate(date: NSDate, key: String) -> NSPredicate {
     
     return NSPredicate(format: "\(key) >= %@ AND \(key) =< %@", argumentArray: [startOfMonth, endOfMonth])
 }
+
+//MARK: - MOCKING
+func createTestQuestions() {
+    
+    let oneDay:NSTimeInterval = 24*60*60 //one day
+    let dateFrom = NSDate() //Now
+    let dateTo = dateFrom.dateByAddingTimeInterval(oneDay * 30)
+    
+    var nextDate = NSDate()
+    let endDate = dateTo.dateByAddingTimeInterval(oneDay)
+    
+    while nextDate.compare(endDate) == NSComparisonResult.OrderedAscending
+    {
+        let id: NSNumber = NSNumber.init(longLong: (Int64(nextDate.timeIntervalSinceNow)))
+        let text: String = "Up to a challenge today?"
+        let date: NSDate = nextDate
+        DataManager.sharedInstance.setQuestion(id, text: text, assignDate: date)
+        print("nextDate: \(nextDate)")
+        nextDate = nextDate.dateByAddingTimeInterval(oneDay)
+    }
+}
+
+
+func testAPi() {
+    NetworkManager.sharedInstance.questionGet(NSNumber(longLong: 33))
+}
+

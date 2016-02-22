@@ -33,7 +33,7 @@ public class NetworkManager:CoreNetworkManager
     
     
     //User API
-    public func userCreate(user: User) -> String {
+    public func userCreate(user: User) -> String? {
         if let id = user.id,
             email = user.email,
             firstName = user.firstName,
@@ -55,7 +55,7 @@ public class NetworkManager:CoreNetworkManager
                 return identifer
                 
         }
-        return ""
+        return nil
     }
     
     public func userGet(userId: NSNumber) -> String {
@@ -70,7 +70,7 @@ public class NetworkManager:CoreNetworkManager
         return identifer
     }
     
-    public func userUpdate(user: User) -> String {
+    public func userUpdate(user: User) -> String? {
         if let id = user.id,
             email = user.email,
             firstName = user.firstName,
@@ -91,7 +91,7 @@ public class NetworkManager:CoreNetworkManager
                 
                 return identifer
         }
-        return ""
+        return nil
     }
     
     public func userLogin(email : String, password : String) -> String {
@@ -103,7 +103,7 @@ public class NetworkManager:CoreNetworkManager
     }
     
     //Records API
-    public func recordCreate(userId: NSNumber, record: Record, question: Question) -> String {
+    public func recordCreate(userId: NSNumber, record: Record, question: Question) -> String? {
         
         if let id = record.id,
             answer = record.answer,
@@ -125,7 +125,7 @@ public class NetworkManager:CoreNetworkManager
                 self.sendDataRequest("POST", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.records)", type: RequestType.RecordCreate, identifier: identifer, params: params)
                 return identifer
         }
-        return ""
+        return nil
     }
     
     //TODO: schema startDate endDate
@@ -135,7 +135,7 @@ public class NetworkManager:CoreNetworkManager
         return identifer
     }
     
-    public func recordsUpdate(userId: NSNumber, record: Record, question: Question) -> String {
+    public func recordsUpdate(userId: NSNumber, record: Record, question: Question) -> String? {
         
         if let id = record.id,
             answer = record.answer,
@@ -157,7 +157,7 @@ public class NetworkManager:CoreNetworkManager
                 self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.recordsUpdate)\(id)", type: RequestType.RecordUpdate, identifier: identifer, params: params)
                 return identifer
         }
-        return ""
+        return nil
     }
     
     public func recordDelete(userId: NSNumber, recordId: NSNumber) -> String {
@@ -165,6 +165,53 @@ public class NetworkManager:CoreNetworkManager
         self.sendDataRequest("DELETE", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.recordsUpdate)\(recordId)", type: RequestType.RecordDelete, identifier: identifer)
         return identifer
     }
+    
+    
+    public func questionsGet() -> String {
+        let identifer = "getQuestions"
+        self.sendDataRequest("GET", endpoint: Constant.String.Endpoint.questionList, type: RequestType.QuestionsGet, identifier: identifer)
+        return identifer
+    }
+    
+    public func questionGet(questionId : NSNumber) -> String {
+        let identifer = "getQuestion\(questionId)"
+        self.sendDataRequest("GET", endpoint: "\(Constant.String.Endpoint.question)\(questionId)", type: RequestType.QuestionGet, identifier: identifer)
+        return identifer
+    }
+    
+    public func questionDelete(questionId : NSNumber) -> String {
+        let identifer = "deleteQuestion\(questionId)"
+        self.sendDataRequest("DELETE", endpoint: "\(Constant.String.Endpoint.question)\(questionId)", type: RequestType.QuestionDelete, identifier: identifer)
+        return identifer
+    }
+    
+    public func questionCreate(question : Question, rate : NSNumber) -> String? {
+        
+        if let text = question.text,
+            assignedDate = question.assignedDate {
+                
+                let identifer = "createQuestion\(assignedDate)"
+                let params = ["text" : text, "assignedDate" : assignedDate, "rate" : rate];
+                self.sendDataRequest("POST", endpoint: Constant.String.Endpoint.questionCreate, type: RequestType.QuestionCreate, identifier: identifer, params: params)
+                return identifer
+        }
+        return nil
+    }
+    
+    public func questionUpdate(question : Question, rate : NSNumber) -> String? {
+        
+        if let text = question.text,
+            assignedDate = question.assignedDate,
+            questionId = question.id {
+                
+                let identifer = "createUpdate\(assignedDate)"
+                let params = ["text" : text, "assignedDate" : assignedDate, "rate" : rate];
+                self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.question)\(questionId)", type: RequestType.QuestionUpdate, identifier: identifer, params: params)
+                return identifer
+        }
+        return nil
+    }
+    
     
     //MARK: Download file requests
     /**
@@ -191,7 +238,7 @@ public class NetworkManager:CoreNetworkManager
     override func updateMetadata(response: NSURLResponse?, requestType:RequestType, requestIdentifier: String) {
         if let httpResponse = response as? NSHTTPURLResponse {
             let headers = httpResponse.allHeaderFields
-            let identifier : Int64 = Int64("\(requestType.rawValue)\(requestIdentifier)\(arc4random_uniform(1000000000))")!
+            let identifier : Int64 = Int64(arc4random_uniform(1000000000))
             
             if let eTag = headers["ETag"] as? String,
                 cacheControl = headers["Cache-Control"] as? String,
@@ -271,6 +318,17 @@ public class NetworkManager:CoreNetworkManager
             return self.processRecordDelete(requestIdentifier, data: data)
         case RequestType.RecordUpdate:
             return self.processRecordUpdate(requestIdentifier, data: data)
+            //Questions
+        case RequestType.QuestionCreate:
+            return self.processQuestionCreate(requestIdentifier, data: data)
+        case RequestType.QuestionUpdate:
+            return self.processQuestionUpdate(requestIdentifier, data: data)
+        case RequestType.QuestionGet:
+            return self.processQuestionGet(requestIdentifier, data: data)
+        case RequestType.QuestionsGet:
+            return self.processQuestionsGet(requestIdentifier, data: data)
+        case RequestType.QuestionDelete:
+            return self.processRecordDelete(requestIdentifier, data: data)
         default:
             logDebug("\(data)");
             return true
@@ -365,6 +423,48 @@ public class NetworkManager:CoreNetworkManager
     }
     
     func processRecordDelete(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processQuestionCreate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processQuestionUpdate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        return true;
+    }
+    
+    func processQuestionGet(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        if let questionId = data["questionId"] as? String,
+            idInt = Int64(questionId),
+            text = data["text"] as? String,
+            assignedDate = data["assignedDate"] as? String,
+            _ = data["rate"] as? String {
+                DataManager.sharedInstance.setQuestion(NSNumber(longLong: idInt), text: text, assignDate: dateFromString(assignedDate)!)
+                return true
+        }
+        
+        return false
+    }
+    
+    func processQuestionsGet(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        if let array : NSArray = data["result"] as? NSArray {
+            for question in array {
+                if let questionId = question["questionId"] as? String,
+                   idInt = Int64(questionId),
+                   text = question["text"] as? String,
+                   assignedDate = question["assignedDate"] as? String,
+                   _ = question["rate"] as? String {
+                    DataManager.sharedInstance.setQuestion(NSNumber(longLong: idInt), text: text, assignDate: dateFromString(assignedDate)!)
+                }
+            }
+            return true
+        }
+        
+        return false
+    }
+    
+    func processQuestionDelete(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
         return true;
     }
 }

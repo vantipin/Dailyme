@@ -47,6 +47,10 @@ struct Constant {
             static let diarySegueId = "DiarySegueId"
         }
         
+        struct Server {
+            static let apiServer = "http://thedailyme-dev.elasticbeanstalk.com/api"
+        }
+        
         struct Endpoint {
             
             //test
@@ -61,6 +65,11 @@ struct Constant {
             //Records
             static let records = "/records"///user/{userId}/records //POST/GET
             static let recordsUpdate = "/records/"///user/{id}/records/{recordId} //PUT/GET/DELETE
+            
+            //Questions
+            static let questionCreate = "/question" //CREATE
+            static let question = "/question/" //UPDATE/DELETE/GET
+            static let questionList = "/question/list" //Get many
         }
         
         struct Notification {
@@ -101,6 +110,13 @@ public enum RequestType: Int
     case RecordGet
     case RecordUpdate
     case RecordDelete
+    
+    //Questions
+    case QuestionCreate
+    case QuestionGet
+    case QuestionUpdate
+    case QuestionDelete
+    case QuestionsGet
 }
 
 enum AuthorizationType: Int

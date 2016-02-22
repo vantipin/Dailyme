@@ -23,6 +23,8 @@ class DailyMeViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        testAPi()
+        
         recordView.textViewAnswer.text = ""
         recordView.textViewNote.text = ""
         
@@ -38,7 +40,7 @@ class DailyMeViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
         else {
             //create MOCK
-            self.createTestQuestions()
+            createTestQuestions()
             if let questionCheck = DataManager.sharedInstance.fetchQuestionForDate(date) {
                 question = questionCheck
                 recordView.setQuestion(questionCheck)
@@ -59,26 +61,6 @@ class DailyMeViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         super.didReceiveMemoryWarning()
         
         
-    }
-    
-    func createTestQuestions() {
-        
-        let oneDay:NSTimeInterval = 24*60*60 //one day
-        let dateFrom = NSDate() //Now
-        let dateTo = dateFrom.dateByAddingTimeInterval(oneDay * 30)
-        
-        var nextDate = NSDate()
-        let endDate = dateTo.dateByAddingTimeInterval(oneDay)
-        
-        while nextDate.compare(endDate) == NSComparisonResult.OrderedAscending
-        {
-            let id: NSNumber = NSNumber.init(longLong: (Int64(nextDate.timeIntervalSinceNow)))
-            let text: String = "Up to a challenge today?"
-            let date: NSDate = nextDate
-            DataManager.sharedInstance.setQuestion(id, text: text, assignDate: date)
-            print("nextDate: \(nextDate)")
-            nextDate = nextDate.dateByAddingTimeInterval(oneDay)
-        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
