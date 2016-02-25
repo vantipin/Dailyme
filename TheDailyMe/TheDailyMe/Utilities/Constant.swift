@@ -28,7 +28,7 @@ struct Constant {
     struct String {
         
         static let ApiKey = "API_KEY";
-        static let UserIdKey = "USER_ID_KEY";
+        static let UserEmailKey = "USER_EMAIl_KEY";
         static let Font = "Helvetica"
         static let FontBold = "Helvetica-Bold"
         

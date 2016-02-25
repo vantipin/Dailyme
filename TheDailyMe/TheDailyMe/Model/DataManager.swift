@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-public class DataManager: NSObject {
+public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     
     private var model: NSManagedObjectModel
     private var context: NSManagedObjectContext
@@ -17,6 +17,8 @@ public class DataManager: NSObject {
     
     static let fileManager = NSFileManager.defaultManager()
     
+    
+    public var user: User? = nil
     public static let sharedInstance = DataManager()
     
     /**
@@ -46,6 +48,47 @@ public class DataManager: NSObject {
 
         self.context.persistentStoreCoordinator = self.coordinator
         self.context.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+        
+        super.init()
+        self.setCoreUser()
+        //keep user updated
+        let fetchResult = self.userController()
+        fetchResult?.delegate = self;
+        
+    }
+    
+    public func setCoreUser() {
+        if let email = DataManager.userEmail() as? String {
+            self.user = self.fetchEntity("User", withFieldKey: "email", withFieldValue: email) as? User
+        }
+        else {
+            let email = "empty"
+            DataManager.setUserEmail(email)
+            self.user = self.setUser(nil, email: email, firstName: nil, lastName: nil, password: nil, avatarImage: nil)
+        }
+    }
+    
+    public static func userEmail() -> AnyObject? {
+        return NSUserDefaults.standardUserDefaults().objectForKey(Constant.String.UserEmailKey)
+    }
+    
+    public static func setUserEmail(email: String) {
+        NSUserDefaults.standardUserDefaults().setObject(email, forKey: Constant.String.UserEmailKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    public func isAuthorised() -> Bool {
+        return self.user?.id != nil
+    }
+    
+    public func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        switch (type) {
+        case .Update:
+            self.setCoreUser()
+            break;
+        default:
+            break;
+        }
     }
     
     // MARK: - Fetch Methods
@@ -416,9 +459,9 @@ public class DataManager: NSObject {
     - returns: Fetch results controller for the user or nil.
     */
     public func userController() -> NSFetchedResultsController? {
-        if let registeredUserId : NSNumber = NSUserDefaults.standardUserDefaults().objectForKey(Constant.String.UserIdKey) as? NSNumber {
-            let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
-            let _ : NSPredicate = NSPredicate(format: "id=\(registeredUserId)")
+        if let registeredUserId : NSNumber = DataManager.userEmail() as? NSNumber {
+            let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "email", ascending: true, selector: Selector("compare:"))
+            let _ : NSPredicate = NSPredicate(format: "email=\(registeredUserId)")
             let userController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("User", predicate: nil, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
             
             return userController

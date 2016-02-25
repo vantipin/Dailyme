@@ -188,6 +188,9 @@ func createTestQuestions() {
 
 
 func testAPi() {
-    NetworkManager.sharedInstance.questionGet(NSNumber(longLong: 33))
+    NetworkManager.sharedInstance.questionsGet()
 }
+
+
+
 

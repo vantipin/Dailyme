@@ -43,7 +43,7 @@ public class NetworkManager:CoreNetworkManager
             avatarImage = user.avatarImage {
                 
                 let identifer = "createUser\(id.integerValue)"
-                let params : [String : AnyObject] = ["id": id,
+                let params : [String : AnyObject] = [
                     "email": email,
                     "firstName": firstName,
                     "lastName": lastName,
@@ -105,8 +105,7 @@ public class NetworkManager:CoreNetworkManager
     //Records API
     public func recordCreate(userId: NSNumber, record: Record, question: Question) -> String? {
         
-        if let id = record.id,
-            answer = record.answer,
+        if let answer = record.answer,
             note = record.note,
             date = record.date,
             stringDate = dateToString(date),
@@ -117,7 +116,7 @@ public class NetworkManager:CoreNetworkManager
                 
                 let identifer = "createRecord\(record.id?.integerValue)"
                 let questionParams = ["id" : questionId, "text" : questionText, "assignedDate" : stringAssignDate];
-                let params : [String : AnyObject] = ["id": id,
+                let params : [String : AnyObject] = [
                     "answer": answer,
                     "note": note,
                     "date": stringDate,
@@ -204,7 +203,7 @@ public class NetworkManager:CoreNetworkManager
             assignedDate = question.assignedDate,
             questionId = question.id {
                 
-                let identifer = "createUpdate\(assignedDate)"
+                let identifer = "questionUpdate\(assignedDate)"
                 let params = ["text" : text, "assignedDate" : assignedDate, "rate" : rate];
                 self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.question)\(questionId)", type: RequestType.QuestionUpdate, identifier: identifer, params: params)
                 return identifer
@@ -362,16 +361,13 @@ public class NetworkManager:CoreNetworkManager
            avatarImage = userData["avatarImage"] as? NSData {
             
             let userId : NSNumber = NSNumber.init(longLong: Int64(id))
+            NSUserDefaults.standardUserDefaults().setObject(email, forKey: Constant.String.UserEmailKey)
             DataManager.sharedInstance.setUser(userId,
                 email: email,
                 firstName: firstName,
                 lastName: lastName,
                 password: password,
                 avatarImage: avatarImage)
-            
-            //NSUserDefaults.standardUserDefaults().stringForKey(Constant.String.UserIdKey)
-            
-            NSUserDefaults.standardUserDefaults().setObject(userId, forKey: Constant.String.UserIdKey)
             
             return true
         }
