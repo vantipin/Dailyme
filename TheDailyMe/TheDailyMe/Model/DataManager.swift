@@ -14,6 +14,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     private var model: NSManagedObjectModel
     private var context: NSManagedObjectContext
     private var coordinator: NSPersistentStoreCoordinator
+    private var fetchResult: NSFetchedResultsController? = nil
     
     static let fileManager = NSFileManager.defaultManager()
     
@@ -51,44 +52,40 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
         
         super.init()
         self.setCoreUser()
-        //keep user updated
-        let fetchResult = self.userController()
-        fetchResult?.delegate = self;
-        
+        self.initUserFetch()
+    }
+    
+    public func initUserFetch() {
+        self.fetchResult = self.userController(self)
     }
     
     public func setCoreUser() {
-        if let email = DataManager.userEmail() as? String {
+        if let email = self.userEmail() as? String {
             self.user = self.fetchEntity("User", withFieldKey: "email", withFieldValue: email) as? User
         }
         else {
             let email = "empty"
-            DataManager.setUserEmail(email)
-            self.user = self.setUser(nil, email: email, firstName: nil, lastName: nil, password: nil, avatarImage: nil)
+            self.setUserEmail(email)
+            self.user = self.setUser(nil, email: email, birthDate: nil, firstName: nil, lastName: nil, password: nil, avatarImage: nil)
         }
     }
     
-    public static func userEmail() -> AnyObject? {
+    public func userEmail() -> AnyObject? {
         return NSUserDefaults.standardUserDefaults().objectForKey(Constant.String.UserEmailKey)
     }
     
-    public static func setUserEmail(email: String) {
+    public func setUserEmail(email: String) {
         NSUserDefaults.standardUserDefaults().setObject(email, forKey: Constant.String.UserEmailKey)
         NSUserDefaults.standardUserDefaults().synchronize()
+        self.initUserFetch()
     }
     
     public func isAuthorised() -> Bool {
         return self.user?.id != nil
     }
     
-    public func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        switch (type) {
-        case .Update:
-            self.setCoreUser()
-            break;
-        default:
-            break;
-        }
+    public func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        self.setCoreUser()
     }
     
     // MARK: - Fetch Methods
@@ -146,7 +143,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
         return nil
     }
     
-    public func fetchEntities(entityName: String, predicate: NSPredicate) -> [AnyObject]? {
+    public func fetchEntities(entityName: String, predicate: NSPredicate?) -> [AnyObject]? {
         let fetchRequest: NSFetchRequest = NSFetchRequest()
         let entity: NSEntityDescription = NSEntityDescription.entityForName(entityName, inManagedObjectContext: self.context)!
         
@@ -272,6 +269,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     
     public func setUser(id: NSNumber?,
         email: String,
+        birthDate: NSDate?,
         firstName: String?,
         lastName: String?,
         password: String?,
@@ -291,6 +289,9 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
         }
         if lastName != nil {
             object?.lastName = lastName
+        }
+        if birthDate != nil {
+            object?.birthDate = birthDate
         }
         if password != nil {
             object?.password = password
@@ -429,7 +430,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     
     - returns: Fetch result controller or nil.
     */
-    public func fetchResultControllerWithEntityName(entityName: String, predicate: NSPredicate?, sortDescriptor: NSSortDescriptor, sectionNameKeyPath: String?) -> NSFetchedResultsController? {
+    public func fetchResultControllerWithEntityName(entityName: String, predicate: NSPredicate?, sortDescriptor: NSSortDescriptor, sectionNameKeyPath: String?, cacheFile: String?, delegate: NSFetchedResultsControllerDelegate?) -> NSFetchedResultsController? {
         let fetchRequest: NSFetchRequest = NSFetchRequest()
         let entity: NSEntityDescription = NSEntityDescription.entityForName(entityName, inManagedObjectContext: self.context)!
         
@@ -441,8 +442,8 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        let controller: NSFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.context, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
-        
+        let controller: NSFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.context, sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheFile)
+        controller.delegate = delegate
         do {
             try controller.performFetch()
         } catch let error as NSError {
@@ -458,20 +459,22 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     
     - returns: Fetch results controller for the user or nil.
     */
-    public func userController() -> NSFetchedResultsController? {
-        if let registeredUserId : NSNumber = DataManager.userEmail() as? NSNumber {
-            let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "email", ascending: true, selector: Selector("compare:"))
-            let _ : NSPredicate = NSPredicate(format: "email=\(registeredUserId)")
-            let userController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("User", predicate: nil, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
-            
-            return userController
-        }
-        return nil
+    public func userController(delegate : NSFetchedResultsControllerDelegate) -> NSFetchedResultsController? {
+        let predicate = NSPredicate(format: "%K = %@", "email", self.userEmail() as! String)
+        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
+        let userController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("User",
+            predicate: predicate,
+            sortDescriptor: sortDescriptor,
+            sectionNameKeyPath: nil,
+            cacheFile: nil,
+            delegate: delegate)
+        
+        return userController
     }
  
     public func questionsController() -> NSFetchedResultsController? {
         let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
-        let questionController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("Question", predicate: nil, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
+        let questionController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("Question", predicate: nil, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil, cacheFile: nil, delegate: nil)
         
         return questionController
     }
@@ -480,6 +483,6 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
         let predicate = NSPredicate(format: "question.id = \(questionId)")
         let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
         
-        return self.fetchResultControllerWithEntityName("Record", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil)
+        return self.fetchResultControllerWithEntityName("Record", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil, cacheFile: nil, delegate: nil)
     }
 }

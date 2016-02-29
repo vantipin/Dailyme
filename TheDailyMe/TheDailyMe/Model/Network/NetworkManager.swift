@@ -364,6 +364,7 @@ public class NetworkManager:CoreNetworkManager
             NSUserDefaults.standardUserDefaults().setObject(email, forKey: Constant.String.UserEmailKey)
             DataManager.sharedInstance.setUser(userId,
                 email: email,
+                birthDate:  nil,
                 firstName: firstName,
                 lastName: lastName,
                 password: password,
