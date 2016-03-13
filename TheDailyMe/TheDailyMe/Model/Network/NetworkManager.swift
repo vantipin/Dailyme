@@ -13,26 +13,47 @@ public class NetworkManager:CoreNetworkManager
 {
     public static let sharedInstance = NetworkManager()
     
-    
-    //test
-    public func getSomeData() -> String {
-        let identifer = "TestEndPoint"
-        self.sendDataRequest("GET", endpoint: Constant.String.Endpoint.testEndpoint, type: RequestType.TestEndpoint, identifier: identifer)
-//        self.sendDataRequest("POST", endpoint: Constant.String.Endpoint.testEndpoint, type: RequestType.TestEndpoint, identifier: identifer, params: params)
-        return identifer
-    }
-    
-    public func postSomeData() -> String {
-        let identifer = "TestEndPoint"
-        let params = ["userEMail": "pinkypinkyhorror@gmail.com"]
-        self.sendDataRequest("POST", endpoint: Constant.String.Endpoint.testEndpointPost, type: RequestType.TestEndpoint, identifier: identifer, params: params)
-        return identifer
-    }
-    
     //Request API KEY
     
     
     //User API
+    public func userCreate(id: NSNumber?,
+        email: String,
+        birthDate: String?,
+        firstName: String?,
+        lastName: String?,
+        password: String,
+        avatarImage: NSData?) -> String {
+            let identifer = "createUser\(email)"
+            var birthData: String? = nil
+            if let checkDate = birthDate,
+               _ = dateFromString(checkDate) {
+                birthData = birthDate
+            }
+            else {
+                birthData = ""
+            }
+            
+            var imageData: String? = nil
+            if let checkImage = avatarImage {
+                imageData = checkImage.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+            }
+            else {
+                imageData = ""
+            }
+            
+            let params : [String : AnyObject] = [
+                "email": email,
+                "firstName": firstName != nil ? firstName! : "",
+                "lastName": lastName != nil ? lastName! : "",
+                "password": password,
+                "birthDate": birthData!,
+                "avatarImage": imageData!]
+            self.sendDataRequest("POST", endpoint: Constant.String.Endpoint.userCreate, type: RequestType.UserCreate, identifier: identifer, params: params)
+            
+            return identifer
+    }
+    
     public func userCreate(user: User) -> String? {
         if let id = user.id,
             email = user.email,
@@ -42,14 +63,15 @@ public class NetworkManager:CoreNetworkManager
             birthDate = user.birthDate,
             avatarImage = user.avatarImage {
                 
+                let base64String = avatarImage.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
                 let identifer = "createUser\(id.integerValue)"
                 let params : [String : AnyObject] = [
                     "email": email,
                     "firstName": firstName,
                     "lastName": lastName,
                     "password": password,
-                    "birthDate": birthDate,
-                    "avatarImage": avatarImage]
+                    "birthDate": dateToString(birthDate)!,
+                    "avatarImage": base64String]
                 self.sendDataRequest("POST", endpoint: Constant.String.Endpoint.userCreate, type: RequestType.UserCreate, identifier: identifer, params: params)
                 
                 return identifer
@@ -60,13 +82,13 @@ public class NetworkManager:CoreNetworkManager
     
     public func userGet(userId: NSNumber) -> String {
         let identifer = "getUser\(userId)"
-        self.sendDataRequest("GET", endpoint: "\(Constant.String.Endpoint.user)\(userId)", type: RequestType.UserGet, identifier: identifer)
+        self.sendDataRequest("GET", endpoint: "\(Constant.String.Endpoint.user)\(userId.longLongValue)", type: RequestType.UserGet, identifier: identifer)
         return identifer
     }
     
     public func userDelete(userId: NSNumber) -> String {
         let identifer = "deleteUser\(userId)"
-        self.sendDataRequest("Delete", endpoint: "\(Constant.String.Endpoint.user)\(userId)", type: RequestType.UserDelete, identifier: identifer)
+        self.sendDataRequest("Delete", endpoint: "\(Constant.String.Endpoint.user)\(userId.longLongValue)", type: RequestType.UserDelete, identifier: identifer)
         return identifer
     }
     
@@ -79,15 +101,16 @@ public class NetworkManager:CoreNetworkManager
             birthDate = user.birthDate,
             avatarImage = user.avatarImage {
                 
+                let base64String = avatarImage.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
                 let identifer = "updateUser\(id.integerValue)"
                 let params : [String : AnyObject] = ["id": id,
                     "email": email,
                     "firstName": firstName,
                     "lastName": lastName,
-                    "birthDate": birthDate,
+                    "birthDate": dateToString(birthDate)!,
                     "password": password,
-                    "avatarImage": avatarImage]
-                self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.user)\(user.id)", type: RequestType.UserUpdate, identifier: identifer, params: params)
+                    "avatarImage": base64String]
+                self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.user)\(user.id!)", type: RequestType.UserUpdate, identifier: identifer, params: params)
                 
                 return identifer
         }
@@ -121,7 +144,7 @@ public class NetworkManager:CoreNetworkManager
                     "note": note,
                     "date": stringDate,
                     "question": questionParams]
-                self.sendDataRequest("POST", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.records)", type: RequestType.RecordCreate, identifier: identifer, params: params)
+                self.sendDataRequest("POST", endpoint: "\(Constant.String.Endpoint.user)\(userId.longLongValue)\(Constant.String.Endpoint.records)", type: RequestType.RecordCreate, identifier: identifer, params: params)
                 return identifer
         }
         return nil
@@ -130,7 +153,7 @@ public class NetworkManager:CoreNetworkManager
     //TODO: schema startDate endDate
     public func recordsGet(userId: NSNumber) -> String {
         let identifer = "getRecord\(userId)"
-        self.sendDataRequest("GET", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.records)", type: RequestType.RecordGet, identifier: identifer)
+        self.sendDataRequest("GET", endpoint: "\(Constant.String.Endpoint.user)\(userId.longLongValue)\(Constant.String.Endpoint.records)", type: RequestType.RecordGet, identifier: identifer)
         return identifer
     }
     
@@ -153,7 +176,7 @@ public class NetworkManager:CoreNetworkManager
                     "note": note,
                     "date": stringDate,
                     "question": questionParams]
-                self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.recordsUpdate)\(id)", type: RequestType.RecordUpdate, identifier: identifer, params: params)
+                self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.user)\(userId.longLongValue)\(Constant.String.Endpoint.recordsUpdate)\(id.longLongValue)", type: RequestType.RecordUpdate, identifier: identifer, params: params)
                 return identifer
         }
         return nil
@@ -161,7 +184,7 @@ public class NetworkManager:CoreNetworkManager
     
     public func recordDelete(userId: NSNumber, recordId: NSNumber) -> String {
         let identifer = "deleteRecord\(recordId)"
-        self.sendDataRequest("DELETE", endpoint: "\(Constant.String.Endpoint.user)\(userId)\(Constant.String.Endpoint.recordsUpdate)\(recordId)", type: RequestType.RecordDelete, identifier: identifer)
+        self.sendDataRequest("DELETE", endpoint: "\(Constant.String.Endpoint.user)\(userId.longLongValue)\(Constant.String.Endpoint.recordsUpdate)\(recordId.longLongValue)", type: RequestType.RecordDelete, identifier: identifer)
         return identifer
     }
     
@@ -174,13 +197,13 @@ public class NetworkManager:CoreNetworkManager
     
     public func questionGet(questionId : NSNumber) -> String {
         let identifer = "getQuestion\(questionId)"
-        self.sendDataRequest("GET", endpoint: "\(Constant.String.Endpoint.question)\(questionId)", type: RequestType.QuestionGet, identifier: identifer)
+        self.sendDataRequest("GET", endpoint: "\(Constant.String.Endpoint.question)\(questionId.longLongValue)", type: RequestType.QuestionGet, identifier: identifer)
         return identifer
     }
     
     public func questionDelete(questionId : NSNumber) -> String {
         let identifer = "deleteQuestion\(questionId)"
-        self.sendDataRequest("DELETE", endpoint: "\(Constant.String.Endpoint.question)\(questionId)", type: RequestType.QuestionDelete, identifier: identifer)
+        self.sendDataRequest("DELETE", endpoint: "\(Constant.String.Endpoint.question)\(questionId.longLongValue)", type: RequestType.QuestionDelete, identifier: identifer)
         return identifer
     }
     
@@ -205,7 +228,7 @@ public class NetworkManager:CoreNetworkManager
                 
                 let identifer = "questionUpdate\(assignedDate)"
                 let params = ["text" : text, "assignedDate" : assignedDate, "rate" : rate];
-                self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.question)\(questionId)", type: RequestType.QuestionUpdate, identifier: identifer, params: params)
+                self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.question)\(questionId.longLongValue)", type: RequestType.QuestionUpdate, identifier: identifer, params: params)
                 return identifer
         }
         return nil
@@ -293,10 +316,6 @@ public class NetworkManager:CoreNetworkManager
     */
     override func processResponseData(requestType:RequestType, requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
         switch requestType {
-            //Test
-        case RequestType.TestEndpoint:
-            logDebug("\(data)")
-            return true
             //User
         case RequestType.UserCreate:
             return self.processUserCreate(requestIdentifier, data: data)
@@ -335,7 +354,32 @@ public class NetworkManager:CoreNetworkManager
     }
     
     func processUserCreate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
-        return true;
+        if let id = data["id"] as? String,
+            email = data["email"] as? String {
+                
+                var avatarImage : NSData? = nil
+                if let avatarImageString = data["avatarImage"] as? String {
+                    avatarImage = NSData(base64EncodedString: avatarImageString, options: NSDataBase64DecodingOptions(rawValue: 0))
+                }
+                var birthDate : NSDate? = nil
+                if let birthString = data["birthDate"] as? String {
+                    birthDate = dateFromString(birthString)
+                }
+                
+                let userId : NSNumber = NSNumber.init(longLong: Int64(id)!)
+                DataManager.sharedInstance.setUser(userId,
+                    email: email,
+                    birthDate:  birthDate,
+                    firstName: data["firstName"] as? String,
+                    lastName: data["lastName"] as? String,
+                    password: data["password"] as? String,
+                    avatarImage: avatarImage)
+                DataManager.sharedInstance.setUserEmail(email)
+                DataManager.sharedInstance.setCoreUser()
+                DataManager.sharedInstance.initUserFetch()
+                return true
+        }
+        return false
     }
     
     func processUserGet(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
@@ -352,26 +396,32 @@ public class NetworkManager:CoreNetworkManager
     
     func processUserLogin(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
 
-        if let userData = data["User"],
-           id : Int64 = userData["id"] as? Int64,
-           email = userData["email"] as? String,
-           firstName = userData["firstName"] as? String,
-           lastName = userData["lastName"] as? String,
-           password = userData["password"] as? String,
-           avatarImage = userData["avatarImage"] as? NSData {
-            
-            let userId : NSNumber = NSNumber.init(longLong: Int64(id))
-            NSUserDefaults.standardUserDefaults().setObject(email, forKey: Constant.String.UserEmailKey)
-            DataManager.sharedInstance.setUser(userId,
-                email: email,
-                birthDate:  nil,
-                firstName: firstName,
-                lastName: lastName,
-                password: password,
-                avatarImage: avatarImage)
-            
-            return true
+        if let id = data["id"] as? String,
+            email = data["email"] as? String {
+                
+                var avatarImage : NSData? = nil
+                if let avatarImageString = data["avatarImage"] as? String {
+                    avatarImage = NSData(base64EncodedString: avatarImageString, options: NSDataBase64DecodingOptions(rawValue: 0))
+                }
+                var birthDate : NSDate? = nil
+                if let birthString = data["birthDate"] as? String {
+                    birthDate = dateFromString(birthString)
+                }
+                
+                let userId : NSNumber = NSNumber.init(longLong: Int64(id)!)
+                DataManager.sharedInstance.setUser(userId,
+                    email: email,
+                    birthDate:  birthDate,
+                    firstName: data["firstName"] as? String,
+                    lastName: data["lastName"] as? String,
+                    password: data["password"] as? String,
+                    avatarImage: avatarImage)
+                DataManager.sharedInstance.setUserEmail(email)
+                DataManager.sharedInstance.setCoreUser()
+                DataManager.sharedInstance.initUserFetch()
+                return true
         }
+        return false
 //        200
 //        Returns user profile in case of success login.
 //        ⇄
@@ -404,7 +454,6 @@ public class NetworkManager:CoreNetworkManager
 //            message: string
 //            code:	string
 //        }
-        return false;
     }
     
     func processRecordCreate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {

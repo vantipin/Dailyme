@@ -81,7 +81,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     }
     
     public func isAuthorised() -> Bool {
-        return self.user?.id != nil
+        return self.user?.id != nil && self.user?.id?.intValue != 0
     }
     
     public func controllerDidChangeContent(controller: NSFetchedResultsController) {

@@ -35,26 +35,18 @@ public class ChangePasswordViewController: UIViewController, UITextViewDelegate,
         }
     }
     
-    public func showAlert(text: String) {
-        let alertController = UIAlertController(title: text, message:
-            nil, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default,handler: nil))
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
-    }
-    
     @IBAction func resetPass(sender: UIButton) {
         if let newPass = textFieldNewPass1.text {
             let passwordMatch = textFieldNewPass2.text == textFieldNewPass1.text
             let correctPassword = DataManager.sharedInstance.user?.password == textFieldOldPass.text || DataManager.sharedInstance.user?.password == nil
             
             if !correctPassword {
-                showAlert("Incorrect old password!")
+                showAlert("Incorrect old password!", inController: self)
                 return
             }
             
             if !passwordMatch {
-                showAlert("New passwords must match!")
+                showAlert("New passwords must match!", inController: self)
                 return
             }
             
@@ -68,10 +60,10 @@ public class ChangePasswordViewController: UIViewController, UITextViewDelegate,
                 avatarImage: user.avatarImage)
             
             changePass = true
-            showAlert("New password is set!")
+            showAlert("New password is set!", inController: self)
         }
         else {
-            showAlert("Fields are empty!")
+            showAlert("Fields are empty!", inController: self)
         }
         
     }

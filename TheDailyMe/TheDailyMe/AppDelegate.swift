@@ -17,6 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        if !DataManager.sharedInstance.isAuthorised() {
+            if let loginController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(Constant.String.Storyboard.loginNavigation) as? UINavigationController {
+                NetworkManager.sharedInstance.questionsGet()
+                window?.rootViewController = loginController
+            }
+        }
+        
         return true
     }
 

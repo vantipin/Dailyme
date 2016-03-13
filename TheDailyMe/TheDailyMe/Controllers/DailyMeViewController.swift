@@ -8,7 +8,7 @@
 import UIKit
 import Foundation
 
-class DailyMeViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
+class DailyMeViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate, NetworkDelegate {
     
     @IBOutlet weak var recordView : RecordView!
     @IBOutlet weak var buttonAddNote : UIButton!
@@ -19,14 +19,17 @@ class DailyMeViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     var question : Question?
     var record : Record?
     var date : NSDate = NSDate()
+    var requestIds : NSMutableArray = []
+    var identifier: String = "DailyMeViewController"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        testAPi()
+        NetworkManager.sharedInstance.questionsGet()
         
         recordView.textViewAnswer.text = ""
         recordView.textViewNote.text = ""
+        recordView.textViewQuestion.text = ""
         
         buttonAnswer.titleLabel?.numberOfLines = 2
         buttonAnswer.setTitleColor(UIColor.grayColor(), forState: UIControlState.Normal)
@@ -34,17 +37,30 @@ class DailyMeViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        NetworkManager.sharedInstance.subscribe(self)
+        setupContent()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        NetworkManager.sharedInstance.unsubscribe(self)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        
+        
+    }
+    
+    func setupContent() {
         if let questionCheck = DataManager.sharedInstance.fetchQuestionForDate(date) {
             question = questionCheck
             recordView.setQuestion(questionCheck)
         }
         else {
-            //create MOCK
-            createTestQuestions()
-            if let questionCheck = DataManager.sharedInstance.fetchQuestionForDate(date) {
-                question = questionCheck
-                recordView.setQuestion(questionCheck)
-            }
+            let requestId = NetworkManager.sharedInstance.questionsGet()
+            self.requestIds.addObject(requestId)
         }
         
         if let recordCheck = DataManager.sharedInstance.fetchRecordForDate(date) {
@@ -55,12 +71,6 @@ class DailyMeViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         else {
             buttonAnswer.hidden = false
         }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        
-        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -116,6 +126,25 @@ class DailyMeViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         buttonMenu.setTitle("Menu", forState: UIControlState.Normal)
         
         return true
+    }
+    
+    //MARK: - NetworkDelegate
+    func requestFailed(type:RequestType, identifier: String, httpCode: Int?, customCode:ErrorCode?) {
+        if requestIds.containsObject(identifier) {
+            requestIds.removeObject(identifier)
+            
+        }
+    }
+    
+    func requestProcessed(type:RequestType, identifier: String) {
+        if requestIds.containsObject(identifier) {
+            requestIds.removeObject(identifier)
+            setupContent()
+        }
+    }
+    
+    func requestProgress(type:RequestType, identifier: String, value: Float) {
+        
     }
     
 }

@@ -47,6 +47,11 @@ struct Constant {
             static let diarySegueId = "DiarySegueId"
         }
         
+        struct Storyboard {
+            static let loginNavigation = "LoginNavigationController"
+            static let defaultNavigation = "DefaultNavigationController"
+        }
+        
         struct Server {
             static let apiServer = "http://thedailyme-dev.elasticbeanstalk.com/api"
         }
