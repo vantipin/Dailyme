@@ -321,31 +321,42 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     }
     
     
-    public func setRecord(id: NSNumber?,
+    public func setRecord(record: Record?,
+        id: NSNumber?,
         answer: String,
         note: String?,
-        var date: NSDate?,
+        date: NSDate?,
         question: Question) -> Record?
     {
-            
-        var record : Record? = (id != nil) ? self.fetchEntity("Record", withFieldKey: "id", withFieldValue: id!) as? Record : nil
-        if record == nil {
-            record = (NSEntityDescription.insertNewObjectForEntityForName("Record", inManagedObjectContext: self.context) as! Record)
-            record!.id = id
+        var recordObj : Record? = record
+        //attempt to locate
+        if recordObj == nil {
+            recordObj = (id != nil) ? self.fetchEntity("Record", withFieldKey: "id", withFieldValue: id!) as? Record : nil
         }
-        record?.answer = answer
+        //attempt to create
+        if recordObj == nil {
+            recordObj = (NSEntityDescription.insertNewObjectForEntityForName("Record", inManagedObjectContext: self.context) as! Record)
+            recordObj!.id = id
+        }
+        recordObj?.answer = answer
+        if id != nil {
+            recordObj?.id = id
+        }
         if note != nil {
-            record?.note = note
+            recordObj?.note = note
         }
-        if date == nil {
-            date = NSDate();
+        if let dateObj = date {
+            recordObj?.date = dateObj
         }
-        record?.date = date
-        record?.question = question
+        else {
+            recordObj?.date = NSDate()
+        }
+        
+        recordObj?.question = question
         
         self.saveContext()
         
-        return record
+        return recordObj
     }
     
     // MARK: - Delete Methods
@@ -461,7 +472,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     */
     public func userController(delegate : NSFetchedResultsControllerDelegate) -> NSFetchedResultsController? {
         let predicate = NSPredicate(format: "%K = %@", "email", self.userEmail() as! String)
-        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
+        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: #selector(NSNumber.compare(_:)))
         let userController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("User",
             predicate: predicate,
             sortDescriptor: sortDescriptor,
@@ -473,7 +484,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     }
  
     public func questionsController() -> NSFetchedResultsController? {
-        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
+        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: #selector(NSNumber.compare(_:)))
         let questionController: NSFetchedResultsController? = self.fetchResultControllerWithEntityName("Question", predicate: nil, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil, cacheFile: nil, delegate: nil)
         
         return questionController
@@ -481,7 +492,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     
     public func recordController(questionId: String) -> NSFetchedResultsController? {
         let predicate = NSPredicate(format: "question.id = \(questionId)")
-        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: Selector("compare:"))
+        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "id", ascending: true, selector: #selector(NSNumber.compare(_:)))
         
         return self.fetchResultControllerWithEntityName("Record", predicate: predicate, sortDescriptor: sortDescriptor, sectionNameKeyPath: nil, cacheFile: nil, delegate: nil)
     }

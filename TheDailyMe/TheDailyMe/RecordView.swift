@@ -17,10 +17,11 @@ public class RecordView: UIView {
     @IBOutlet weak var textViewAnswer : UITextView!
 
     public func setQuestion(question: Question) {
-        textViewQuestion.text = question.text
+        textViewQuestion.text = question.text!
         labelDate.text = dateToString(question.assignedDate!, format: "dd MMMM yyyy", escapeSymbols: false)
         textViewQuestion.font = UIFont(name: Constant.String.FontBold, size: 14)
-        textViewQuestion.textContainerInset = UIEdgeInsetsZero
+        //textViewQuestion.textContainerInset = UIEdgeInsetsZero
+        //textViewQuestion.sizeToFit()
     }
     
     public func setRecord(record: Record) {

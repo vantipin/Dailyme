@@ -13,6 +13,8 @@ public class NoteTodayViewController: UIViewController, UITextViewDelegate, UITe
     
     public var record: Record!
     
+    weak public var syncController: DailyMeViewController?
+    
     @IBOutlet weak var textViewNote: UITextView!
     
     override public func viewDidLoad() {
@@ -30,6 +32,10 @@ public class NoteTodayViewController: UIViewController, UITextViewDelegate, UITe
     
     public func textViewShouldEndEditing(textView: UITextView) -> Bool {
         textView.endEditing(true)
+        //mark sync case
+        if textView.text != record.note && syncController != nil {
+            syncController?.didChange = true
+        }
         record.note = textView.text
         DataManager.sharedInstance.saveContext()
         return true

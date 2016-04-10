@@ -132,17 +132,19 @@ public class NetworkManager:CoreNetworkManager
             note = record.note,
             date = record.date,
             stringDate = dateToString(date),
-            questionId = question.id,
-            questionText = question.text,
-            questionDate = question.assignedDate,
-            stringAssignDate = dateToString(questionDate) {
+//            questionText = question.text,
+//            questionDate = question.assignedDate,
+//            stringAssignDate = dateToString(questionDate),
+            questionId = question.id {
                 
                 let identifer = "createRecord\(record.id?.integerValue)"
-                let questionParams = ["id" : questionId, "text" : questionText, "assignedDate" : stringAssignDate];
+                let questionParams = ["questionId" : questionId];
                 let params : [String : AnyObject] = [
+                    "userId": userId,
                     "answer": answer,
+                    "message": answer,
                     "note": note,
-                    "date": stringDate,
+                    "fillDate": stringDate,
                     "question": questionParams]
                 self.sendDataRequest("POST", endpoint: "\(Constant.String.Endpoint.user)\(userId.longLongValue)\(Constant.String.Endpoint.records)", type: RequestType.RecordCreate, identifier: identifer, params: params)
                 return identifer
@@ -457,10 +459,55 @@ public class NetworkManager:CoreNetworkManager
     }
     
     func processRecordCreate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
-        return true;
+        if let answer = data["answer"] as? String,
+            idString = data["id"] as? String,
+            idInt = Int64(idString),
+            questionDictionary = data["question"] as? Dictionary<String, AnyObject>,
+            questionDateString = questionDictionary["assignedDate"] as? String,
+            questionDate = dateFromString(questionDateString),
+            question = DataManager.sharedInstance.fetchQuestionForDate(questionDate) {
+            
+            if question.record != nil && question.record?.count > 0 {
+                let unsyncRecord : NSArray = (question.record?.filter() {$0.id == nil || $0.id == 0})!
+                if unsyncRecord.count > 0 {
+                    let record = unsyncRecord.firstObject as! Record
+                    
+                    DataManager.sharedInstance.setRecord(record, id: NSNumber(longLong: idInt), answer: answer, note: nil, date: nil, question: question)
+                    return true
+                }
+            }
+        }
+        return false
     }
     
     func processRecordGet(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
+        let qualityOfServiceClass = QOS_CLASS_BACKGROUND
+        let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
+        
+        dispatch_async(backgroundQueue, {
+            if let result = data["result"] as? NSArray {
+                for record in result {
+                    if let idString = record["id"] as? String,
+                        idInt = Int64(idString),
+                        answer = record["answer"] as? String,
+                        fillDateString = record["fillDate"] as? String,
+                        fillDate = dateFromString(fillDateString),
+                        //                    userIdString = record["userId"] as? String,
+                        //                    userIdInt = Int64(userIdString),
+                        note = record["note"] as? String,
+                        questionDictionary = record["question"] as? Dictionary<String, AnyObject>,
+                        questionDateString = questionDictionary["assignedDate"] as? String,
+                        questionDate = dateFromString(questionDateString),
+                        question = DataManager.sharedInstance.fetchQuestionForDate(questionDate) {
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            DataManager.sharedInstance.setRecord(nil, id: NSNumber(longLong: idInt), answer: answer, note: note, date: fillDate, question: question)
+                        })
+                        
+                    }
+                }
+            }
+        })
         return true;
     }
     
@@ -494,20 +541,26 @@ public class NetworkManager:CoreNetworkManager
     }
     
     func processQuestionsGet(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
-        if let array : NSArray = data["result"] as? NSArray {
-            for question in array {
-                if let questionId = question["questionId"] as? String,
-                   idInt = Int64(questionId),
-                   text = question["text"] as? String,
-                   assignedDate = question["assignedDate"] as? String,
-                   _ = question["rate"] as? String {
-                    DataManager.sharedInstance.setQuestion(NSNumber(longLong: idInt), text: text, assignDate: dateFromString(assignedDate)!)
+        let qualityOfServiceClass = QOS_CLASS_BACKGROUND
+        let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
+        dispatch_async(backgroundQueue, {
+            
+            if let array : NSArray = data["result"] as? NSArray {
+                for question in array {
+                    if let questionId = question["questionId"] as? String,
+                        idInt = Int64(questionId),
+                        text = question["text"] as? String,
+                        assignedDate = question["assignedDate"] as? String,
+                        _ = question["rate"] as? String {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            DataManager.sharedInstance.setQuestion(NSNumber(longLong: idInt), text: text, assignDate: dateFromString(assignedDate)!)
+                        })
+                        
+                    }
                 }
             }
-            return true
-        }
-        
-        return false
+        })
+        return true
     }
     
     func processQuestionDelete(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {

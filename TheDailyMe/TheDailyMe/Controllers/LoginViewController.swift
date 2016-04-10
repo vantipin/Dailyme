@@ -38,10 +38,7 @@ public class LoginViewController: UIViewController, UITextViewDelegate, UITextFi
     public func checkIfAuthorised() {
         if DataManager.sharedInstance.isAuthorised() {
             //user already login
-            if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(Constant.String.Storyboard.defaultNavigation) as? UINavigationController,
-                let window: UIWindow = self.view.window {
-                    window.rootViewController = controller
-            }
+            self.requestIds.addObject(NetworkManager.sharedInstance.recordsGet(DataManager.sharedInstance.user!.id!))
         }
     }
     
@@ -102,8 +99,17 @@ public class LoginViewController: UIViewController, UITextViewDelegate, UITextFi
     public func requestProcessed(type:RequestType, identifier: String) {
         if requestIds.containsObject(identifier) {
             requestIds.removeObject(identifier)
-            checkIfAuthorised()
-            removeOverLayView()
+            
+            if type == RequestType.RecordGet {
+                if let controller = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(Constant.String.Storyboard.defaultNavigation) as? UINavigationController,
+                    let window: UIWindow = self.view.window {
+                    window.rootViewController = controller
+                    removeOverLayView()
+                }
+            }
+            else {
+                checkIfAuthorised()
+            }
         }
     }
     
