@@ -21,7 +21,7 @@ public class LoginViewController: UIViewController, UITextViewDelegate, UITextFi
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
     }
     
     override public func viewDidAppear(animated: Bool) {

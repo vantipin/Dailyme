@@ -58,7 +58,18 @@ public class DiaryViewController : UITableViewController {
         return cell
     }
     
-//  public override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        return 0;
-//    }
+    
+    public override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let questionHeight : CGFloat = 100.0
+        let bodyHeight : CGFloat = 100.0
+        
+        if let question: Question = questionSource[indexPath.row] as? Question {
+            if let _: Record = question.record?.anyObject() as? Record {
+                return questionHeight + bodyHeight
+            }
+            return questionHeight
+        }
+        
+        return 0;
+    }
 }

@@ -55,6 +55,10 @@ public class EditProfileViewController: UIViewController, UITextViewDelegate, UI
         }
     }
     
+    public override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     public override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
