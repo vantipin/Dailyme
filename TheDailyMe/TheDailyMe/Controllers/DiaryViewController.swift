@@ -31,6 +31,7 @@ public class DiaryViewController : UITableViewController {
                 questionSource.removeAllObjects()
                 questionSource.addObjectsFromArray(questions)
         }
+        self.tableView.reloadData()
     }
     
     public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -71,5 +72,20 @@ public class DiaryViewController : UITableViewController {
         }
         
         return 0;
+    }
+    
+    public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if let question: Question = questionSource[indexPath.row] as? Question {
+            self.performSegueWithIdentifier("editRecordSegueId", sender: question)
+        }
+    }
+    
+    
+    public override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let question = sender as? Question,
+           controller = segue.destinationViewController as? DailyMeViewController {
+            controller.date = question.assignedDate!
+            controller.question = question
+        }
     }
 }

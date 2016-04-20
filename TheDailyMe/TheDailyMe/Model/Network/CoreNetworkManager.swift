@@ -68,7 +68,7 @@ public class CoreNetworkManager: NSObject, NSURLSessionTaskDelegate, NSURLSessio
                     break
                 }
             }
-            index++
+            index += 1
         }
     }
     

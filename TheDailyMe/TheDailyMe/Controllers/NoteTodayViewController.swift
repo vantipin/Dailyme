@@ -27,17 +27,24 @@ public class NoteTodayViewController: UIViewController, UITextViewDelegate, UITe
     }
     
     override public func viewDidAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         textViewNote.becomeFirstResponder()
+    }
+    
+    override public func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        //mark sync case
+        if textViewNote.text != record.note && syncController != nil {
+            syncController?.didChange = true
+        }
+        record.note = textViewNote.text
+        DataManager.sharedInstance.saveContext()
     }
     
     public func textViewShouldEndEditing(textView: UITextView) -> Bool {
         textView.endEditing(true)
-        //mark sync case
-        if textView.text != record.note && syncController != nil {
-            syncController?.didChange = true
-        }
-        record.note = textView.text
-        DataManager.sharedInstance.saveContext()
+        
+
         return true
     }
     

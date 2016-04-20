@@ -30,10 +30,10 @@ public class RecordView: UIView {
         textViewNote.font = UIFont(name: Constant.String.Font, size: 14)
         //layoutViews()
     }
-    
-    public func viewSize() -> CGFloat {
-        return textViewNote.frame.origin.y + textViewNote.frame.size.height
-    }
+//    
+//    public func viewSize() -> CGFloat {
+//        return textViewNote.frame.origin.y + textViewNote.frame.size.height
+//    }
     
     public func layoutViews() {
         

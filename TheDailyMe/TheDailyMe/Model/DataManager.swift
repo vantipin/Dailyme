@@ -211,7 +211,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     
     public func fetchQuestionForDate(date: NSDate = NSDate()) -> Question? {
         
-        var question : Question? = nil;
+        var question : Question? = nil
         let objects = self.fetchEntities("Question", predicate: predicateForDayFromDate(date, key: "assignedDate"))
         if (objects != nil) {
             question = objects?.first as? Question
@@ -220,9 +220,20 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
         return question
     }
     
+    public func fetchRecordForQuestion(question: Question, user: User) -> Record? {
+        var record : Record? = nil
+        let objects = self.fetchEntities("Record", predicate: NSPredicate(format: "user == %@ AND question == %@", argumentArray: [user, question]))
+        if (objects != nil) {
+            record = objects?.first as? Record
+        }
+        
+        return record
+    }
+    
     public func fetchRecordForDate(date: NSDate = NSDate()) -> Record? {
         
-        var record : Record? = nil;
+        var record : Record? = nil
+        
         let objects = self.fetchEntities("Record", predicate: predicateForDayFromDate(date, key: "date"))
         if (objects != nil) {
             record = objects?.first as? Record
@@ -236,6 +247,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
         let objects = fetchEntities("Question", predicate: predicateForMonthFromDate(date, key: "assignedDate"))
         if (objects != nil) {
             questions = objects as? [Question]
+            questions!.sortInPlace({ $0.assignedDate?.timeIntervalSinceNow < $1.assignedDate?.timeIntervalSinceNow })
         }
         
         return questions
@@ -323,6 +335,7 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
     
     public func setRecord(record: Record?,
         id: NSNumber?,
+        user: User?,
         answer: String,
         note: String?,
         date: NSDate?,
@@ -341,6 +354,9 @@ public class DataManager: NSObject, NSFetchedResultsControllerDelegate {
         recordObj?.answer = answer
         if id != nil {
             recordObj?.id = id
+        }
+        if user != nil {
+            recordObj?.user = user
         }
         if note != nil {
             recordObj?.note = note

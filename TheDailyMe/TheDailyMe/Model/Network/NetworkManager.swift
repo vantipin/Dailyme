@@ -138,7 +138,7 @@ public class NetworkManager:CoreNetworkManager
             questionId = question.id {
                 
                 let identifer = "createRecord\(record.id?.integerValue)"
-                let questionParams = ["questionId" : questionId];
+                let questionParams = ["questionId" : questionId]
                 let params : [String : AnyObject] = [
                     "userId": userId,
                     "answer": answer,
@@ -167,16 +167,15 @@ public class NetworkManager:CoreNetworkManager
             date = record.date,
             stringDate = dateToString(date),
             questionId = question.id,
-            questionText = question.text,
-            questionDate = question.assignedDate,
-            stringAssignDate = dateToString(questionDate) {
+            questionDate = question.assignedDate {
                 
                 let identifer = "updateRecord\(record.id?.integerValue)"
-                let questionParams = ["id" : questionId, "text" : questionText, "assignedDate" : stringAssignDate];
+                let questionParams = ["questionId" : questionId];
                 let params : [String : AnyObject] = ["id": id,
                     "answer": answer,
                     "note": note,
                     "date": stringDate,
+                    "fillDate": stringDate,
                     "question": questionParams]
                 self.sendDataRequest("PUT", endpoint: "\(Constant.String.Endpoint.user)\(userId.longLongValue)\(Constant.String.Endpoint.recordsUpdate)\(id.longLongValue)", type: RequestType.RecordUpdate, identifier: identifer, params: params)
                 return identifer
@@ -337,7 +336,7 @@ public class NetworkManager:CoreNetworkManager
         case RequestType.RecordDelete:
             return self.processRecordDelete(requestIdentifier, data: data)
         case RequestType.RecordUpdate:
-            return self.processRecordUpdate(requestIdentifier, data: data)
+            return self.processRecordCreate(requestIdentifier, data: data)
             //Questions
         case RequestType.QuestionCreate:
             return self.processQuestionCreate(requestIdentifier, data: data)
@@ -424,38 +423,6 @@ public class NetworkManager:CoreNetworkManager
                 return true
         }
         return false
-//        200
-//        Returns user profile in case of success login.
-//        ⇄
-//        User {
-//            id: integer
-//            email: string
-//            firstName: string
-//            lastName: string
-//            password: string
-//            avatarImage: string
-//        }
-//        400
-//        Invalid api key.
-//        ⇄
-//        Error {
-//            message: string
-//            code: string
-//        }
-//        401	
-//        Returns error message and code in case of unseccessful authentification.
-//        ⇄	
-//        Error {
-//            message: string
-//            code:	string
-//        }
-//        500	
-//        Internal server error.
-//        ⇄	
-//        Error {
-//            message: string
-//            code:	string
-//        }
     }
     
     func processRecordCreate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
@@ -465,16 +432,32 @@ public class NetworkManager:CoreNetworkManager
             questionDictionary = data["question"] as? Dictionary<String, AnyObject>,
             questionDateString = questionDictionary["assignedDate"] as? String,
             questionDate = dateFromString(questionDateString),
-            question = DataManager.sharedInstance.fetchQuestionForDate(questionDate) {
+            question = DataManager.sharedInstance.fetchQuestionForDate(questionDate),
+            userIdString = data["userId"] as? String,
+            userIdInt = Int64(userIdString){
             
             if question.record != nil && question.record?.count > 0 {
-                let unsyncRecord : NSArray = (question.record?.filter() {$0.id == nil || $0.id == 0})!
-                if unsyncRecord.count > 0 {
-                    let record = unsyncRecord.firstObject as! Record
-                    
-                    DataManager.sharedInstance.setRecord(record, id: NSNumber(longLong: idInt), answer: answer, note: nil, date: nil, question: question)
-                    return true
+                var user : User? = nil
+                var record : Record? = nil
+                if let checkUser = DataManager.sharedInstance.fetchEntity("User", withID: userIdInt) as? User {
+                    user = checkUser
+                    record = DataManager.sharedInstance.fetchRecordForQuestion(question, user: checkUser)
                 }
+                else {
+                    let unsyncRecord : NSArray = (question.record?.filter() {$0.id == nil || $0.id == 0})!
+                    if unsyncRecord.count > 0 {
+                        record = unsyncRecord.firstObject as? Record
+                    }
+                }
+                
+                DataManager.sharedInstance.setRecord(record,
+                                                     id: NSNumber(longLong: idInt),
+                                                     user: user,
+                                                     answer: answer,
+                                                     note: nil,
+                                                     date: nil,
+                                                     question: question)
+                return true
             }
         }
         return false
@@ -498,20 +481,29 @@ public class NetworkManager:CoreNetworkManager
                         questionDictionary = record["question"] as? Dictionary<String, AnyObject>,
                         questionDateString = questionDictionary["assignedDate"] as? String,
                         questionDate = dateFromString(questionDateString),
-                        question = DataManager.sharedInstance.fetchQuestionForDate(questionDate) {
+                        question = DataManager.sharedInstance.fetchQuestionForDate(questionDate),
+                        userIdString = record["userId"] as? String,
+                        userIdInt = Int64(userIdString) {
+                        
+                        var user : User? = nil
+                        if let checkUser = DataManager.sharedInstance.fetchEntity("User", withID: userIdInt) as? User {
+                            user = checkUser
+                        }
                         
                         dispatch_async(dispatch_get_main_queue(), {
-                            DataManager.sharedInstance.setRecord(nil, id: NSNumber(longLong: idInt), answer: answer, note: note, date: fillDate, question: question)
+                            DataManager.sharedInstance.setRecord(nil,
+                                id: NSNumber(longLong: idInt),
+                                user: user,
+                                answer: answer,
+                                note: note,
+                                date: fillDate,
+                                question: question)
                         })
                         
                     }
                 }
             }
         })
-        return true;
-    }
-    
-    func processRecordUpdate(requestIdentifier: String, data: Dictionary<String, AnyObject>) -> Bool {
         return true;
     }
     

@@ -24,7 +24,7 @@ Debug Logging.
 - parameter message:      Debug message.
 - parameter functionName: The called function.
 */
-func logDebug(message: String, functionName: String = __FUNCTION__)
+func logDebug(message: String, functionName: String = #function)
 {
     var removedOptionals = message.stringByReplacingOccurrencesOfString("Optional(\"", withString: "")
     removedOptionals = removedOptionals.stringByReplacingOccurrencesOfString("\")", withString: "")
@@ -48,7 +48,7 @@ Error Logging.
 - parameter message:      Error message.
 - parameter functionName: The called function.
 */
-func logError(message: String, functionName: String = __FUNCTION__)
+func logError(message: String, functionName: String = #function)
 {
     var removedOptionals = message.stringByReplacingOccurrencesOfString("Optional(\"", withString: "")
     removedOptionals = removedOptionals.stringByReplacingOccurrencesOfString("\")", withString: "")

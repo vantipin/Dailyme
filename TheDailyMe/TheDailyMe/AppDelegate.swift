@@ -18,15 +18,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        //sync data
+        NetworkManager.sharedInstance.questionsGet()
+        if DataManager.sharedInstance.isAuthorised() {
+            NetworkManager.sharedInstance.recordsGet(DataManager.sharedInstance.user!.id!)
+        }
+        
         if !DataManager.sharedInstance.isAuthorised() {
             if let loginController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(Constant.String.Storyboard.loginNavigation) as? UINavigationController {
-                
-                //sync data
-                NetworkManager.sharedInstance.questionsGet()
-                if DataManager.sharedInstance.isAuthorised() {
-                    NetworkManager.sharedInstance.recordsGet(DataManager.sharedInstance.user!.id!)
-                }
-                
+        
                 window?.rootViewController = loginController
             }
         }

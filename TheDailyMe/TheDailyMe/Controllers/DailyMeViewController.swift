@@ -27,8 +27,6 @@ public class DailyMeViewController: UIViewController, UITextViewDelegate, UIText
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        NetworkManager.sharedInstance.questionsGet()
-        
         recordView.textViewAnswer.text = ""
         recordView.textViewNote.text = ""
         recordView.textViewQuestion.text = ""
@@ -40,7 +38,6 @@ public class DailyMeViewController: UIViewController, UITextViewDelegate, UIText
     
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        didChange = false
         NetworkManager.sharedInstance.subscribe(self)
         setupContent()
 //        if DataManager.sharedInstance.isAuthorised() {
@@ -87,19 +84,19 @@ public class DailyMeViewController: UIViewController, UITextViewDelegate, UIText
         if let questionCheck = DataManager.sharedInstance.fetchQuestionForDate(date) {
             question = questionCheck
             recordView.setQuestion(questionCheck)
+            
+            if let recordCheck = DataManager.sharedInstance.fetchRecordForQuestion(questionCheck, user: DataManager.sharedInstance.user!) {
+                record = recordCheck
+                recordView.setRecord(recordCheck)
+                buttonAnswer.hidden = record?.answer?.characters.count > 0
+            }
+            else {
+                buttonAnswer.hidden = false
+            }
         }
         else {
             let requestId = NetworkManager.sharedInstance.questionsGet()
             self.requestIds.addObject(requestId)
-        }
-        
-        if let recordCheck = DataManager.sharedInstance.fetchRecordForDate(date) {
-            record = recordCheck
-            recordView.setRecord(recordCheck)
-            buttonAnswer.hidden = record?.answer?.characters.count > 0
-        }
-        else {
-            buttonAnswer.hidden = false
         }
     }
     
@@ -108,7 +105,13 @@ public class DailyMeViewController: UIViewController, UITextViewDelegate, UIText
             let controller : NoteTodayViewController = segue.destinationViewController as! NoteTodayViewController
             if record == nil {
                 let id: NSNumber = NSNumber.init(longLong: (Int64(NSDate().timeIntervalSinceNow)))
-                record = DataManager.sharedInstance.setRecord(nil, id: id, answer: "", note: "", date: NSDate(), question: question!)
+                record = DataManager.sharedInstance.setRecord(nil,
+                                                              id: id,
+                                                              user: DataManager.sharedInstance.user,
+                                                              answer: "",
+                                                              note: "",
+                                                              date: NSDate(),
+                                                              question: question!)
             }
             controller.record = record
             controller.syncController = self
@@ -125,6 +128,15 @@ public class DailyMeViewController: UIViewController, UITextViewDelegate, UIText
         
     }
     
+    @IBAction func note(sender: UIButton) {
+        if recordView.textViewAnswer.isFirstResponder() && buttonMenu == nil {
+            recordView.textViewAnswer.endEditing(true)
+        }
+        else {
+            self.performSegueWithIdentifier(Constant.String.Segue.addNoteSegueId, sender: nil)
+        }
+    }
+    
     @IBAction func answer(sender: UIButton) {
         recordView.textViewAnswer.userInteractionEnabled = true
         recordView.textViewAnswer.editable = true
@@ -134,7 +146,12 @@ public class DailyMeViewController: UIViewController, UITextViewDelegate, UIText
     }
     
     public func textViewShouldBeginEditing(textView: UITextView) -> Bool {
-        buttonMenu.setTitle("Done", forState: UIControlState.Normal)
+        if buttonMenu == nil {
+            buttonAddNote.setTitle("Done", forState: UIControlState.Normal)
+        }
+        else {
+            buttonMenu.setTitle("Done", forState: UIControlState.Normal)
+        }
         
         return true
     }
@@ -144,18 +161,31 @@ public class DailyMeViewController: UIViewController, UITextViewDelegate, UIText
         if textView.text.characters.count > 0 {
             if record == nil {
                 let id: NSNumber = NSNumber.init(longLong: (Int64(NSDate().timeIntervalSinceNow)))
-                record = DataManager.sharedInstance.setRecord(nil, id: id, answer: textView.text, note: "", date: NSDate(), question: question!)
+                record = DataManager.sharedInstance.setRecord(nil,
+                                                              id: id,
+                                                              user: DataManager.sharedInstance.user,
+                                                              answer: textView.text,
+                                                              note: "",
+                                                              date: NSDate(),
+                                                              question: question!)
             }
             else {
                 record?.answer = textView.text
             }
             DataManager.sharedInstance.saveContext()
             didChange = true
+            buttonAnswer.hidden = true
         }
         else {
             buttonAnswer.hidden = false
         }
-        buttonMenu.setTitle("Menu", forState: UIControlState.Normal)
+        
+        if buttonMenu == nil {
+            buttonAddNote.setTitle("+Note", forState: UIControlState.Normal)
+        }
+        else {
+            buttonMenu.setTitle("Menu", forState: UIControlState.Normal)
+        }
         
         return true
     }
