@@ -167,7 +167,7 @@ public class NetworkManager:CoreNetworkManager
             date = record.date,
             stringDate = dateToString(date),
             questionId = question.id,
-            questionDate = question.assignedDate {
+            _ = question.assignedDate {
                 
                 let identifer = "updateRecord\(record.id?.integerValue)"
                 let questionParams = ["questionId" : questionId];
