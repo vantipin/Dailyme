@@ -25,12 +25,12 @@ Dailyme tracks how user answers questions in a diary like fashion. Each day user
 $ gem install cocoapods
 ```
 
-Pull repository. Change directory to `/Chatter`. You'll need to run 
+Pull repository. Change directory to `/TheDailyMe`. You'll need to run 
 ```bash
-$ cd ./Chatter
+$ cd ./TheDailyMe
 $ pod update
 ```
-Pods will generate `Chatter.xcworkspace`. Run it with XCode.
+Pods will generate `TheDailyMe.xcworkspace`. Run it with XCode.
 
 
 ## Usage
@@ -43,4 +43,4 @@ Pods will generate `Chatter.xcworkspace`. Run it with XCode.
 
 ## License
 
-Chatter uses the MIT license. Please file an issue if you have any questions or if you'd like to share how you're using this project.
+TheDailyMe uses the MIT license. Please file an issue if you have any questions or if you'd like to share how you're using this project.
